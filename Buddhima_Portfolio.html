@@ -1379,14 +1379,14 @@ function animateSection(sectionId, fn) {
   const skillItems = document.querySelectorAll('#about .skill-bar-item');
 
   animateSection('about', () => {
-    anime({ targets: Array.from(els), 
+    anime({ targets: '#about .section-tag, #about .section-title, #about .about-text p, #about .btn-primary', 
       opacity: [0, 1], translateX: [-50, 0],
-      ease: 'outExpo', duration: 900,
+      easing: 'easeOutExpo', duration: 900,
       delay: anime.stagger(90)
     });
-    anime({ targets: Array.from(skillItems), 
+    anime({ targets: '#about .skill-bar-item', 
       opacity: [0, 1], translateX: [40, 0],
-      ease: 'outExpo', duration: 800,
+      easing: 'easeOutExpo', duration: 800,
       delay: anime.stagger(80, {start: 300})
     });
     setTimeout(() => {
@@ -1404,20 +1404,20 @@ function animateSection(sectionId, fn) {
 
 
   animateSection('whatido', () => {
-    anime({ targets: Array.from(header), 
+    anime({ targets: header, 
       opacity: [0,1], translateY: [-30,0],
-      ease: 'outBack', duration: 700,
+      easing: 'easeOutBack', duration: 700,
       delay: anime.stagger(100)
     });
     anime({ targets: Array.from(cards), 
       opacity: [0,1], translateY: [60,0], scale: [0.9,1],
-      ease: 'outElastic(1,.7)', duration: 1100,
+      easing: 'easeOutElastic(1,.7)', duration: 1100,
       delay: anime.stagger(70, {start: 200})
     });
     // Animate learn-icons with a spin
     document.querySelectorAll('#whatido .learn-icon').forEach((icon, i) => {
       setTimeout(() => {
-        anime({ targets: icon,  rotate: ['-360deg','0deg'], duration: 600, ease: 'outBack' });
+        anime({ targets: icon,  rotate: ['-360deg','0deg'], duration: 600, easing: 'easeOutBack' });
       }, 200 + i * 70);
     });
   });
@@ -1435,8 +1435,8 @@ function animateSection(sectionId, fn) {
   });
   dots.forEach(el => { el.style.transform += ' scale(0)'; });
   animateSection('education', () => {
-    anime({ targets: Array.from(header), 
-      opacity:[0,1], translateY:[-20,0], ease:'outExpo', duration:700, delay: anime.stagger(100)
+    anime({ targets: header, 
+      opacity:[0,1], translateY:[-20,0], easing: 'easeOutExpo', duration:700, delay: anime.stagger(100)
     });
     items.forEach((el, i) => {
       setTimeout(() => {
@@ -1444,12 +1444,12 @@ function animateSection(sectionId, fn) {
           opacity:[0,1],
           translateX: i % 2 === 0 ? [-80,0] : [80,0],
           rotateY: i % 2 === 0 ? [15,0] : [-15,0],
-          ease:'outExpo', duration:900
+          easing: 'easeOutExpo', duration:900
         });
       }, 200 + i * 180);
     });
     anime({ targets: Array.from(dots), 
-      scale:[0,1], ease:'outElastic(1,0.5)', duration:600,
+      scale:[0,1], easing: 'easeOutElastic(1,0.5)', duration:600,
       delay: anime.stagger(180, {start: 300})
     });
   });
@@ -1465,13 +1465,13 @@ function animateSection(sectionId, fn) {
     el.style.transform = 'perspective(800px) rotateX(25deg) translateY(60px) scale(0.95)';
   });
   animateSection('projects', () => {
-    anime({ targets: Array.from(header), 
-      opacity:[0,1], translateY:[-20,0], ease:'outExpo', duration:700, delay: anime.stagger(100)
+    anime({ targets: header, 
+      opacity:[0,1], translateY:[-20,0], easing: 'easeOutExpo', duration:700, delay: anime.stagger(100)
     });
     anime({ targets: Array.from(cards), 
       opacity:[0,1], translateY:[60,0],
       rotateX:[25,0], scale:[0.95,1],
-      ease:'outExpo', duration:1000,
+      easing: 'easeOutExpo', duration:1000,
       delay: anime.stagger(120, {start: 200})
     });
     // Animate tech chips
@@ -1480,7 +1480,7 @@ function animateSection(sectionId, fn) {
 
       anime({ targets: Array.from(chips), 
         opacity:[0,1], scale:[0.5,1],
-        ease:'outBack', duration:400,
+        easing: 'easeOutBack', duration:400,
         delay: anime.stagger(25, {start: 600})
       });
     }, 100);
@@ -1494,12 +1494,12 @@ function animateSection(sectionId, fn) {
 
 
   animateSection('certifications', () => {
-    anime({ targets: Array.from(header), 
-      opacity:[0,1], translateY:[-20,0], ease:'outExpo', duration:700, delay: anime.stagger(100)
+    anime({ targets: header, 
+      opacity:[0,1], translateY:[-20,0], easing: 'easeOutExpo', duration:700, delay: anime.stagger(100)
     });
     anime({ targets: Array.from(cards), 
       opacity:[0,1], translateY:[50,0], scale:[0.95,1],
-      ease:'outExpo', duration:900,
+      easing: 'easeOutExpo', duration:900,
       delay: anime.stagger(100, {start: 200})
     });
   });
@@ -1507,19 +1507,15 @@ function animateSection(sectionId, fn) {
 
 // -- CONTACT SECTION --
 (function(){
-  const formEls = document.querySelectorAll('#contact .section-tag, #contact h2, #contact .contact-subtitle, #contact .cinput, #contact .csend-btn');
-  const ccards = document.querySelectorAll('#contact .ccard');
-
-
   animateSection('contact', () => {
-    anime({ targets: Array.from(formEls), 
+    anime({ targets: '#contact .section-tag, #contact h2, #contact .contact-subtitle, #contact .cinput, #contact .csend-btn', 
       opacity:[0,1], translateX:[-40,0],
-      ease:'outExpo', duration:800,
+      easing: 'easeOutExpo', duration:800,
       delay: anime.stagger(80)
     });
-    anime({ targets: Array.from(ccards), 
+    anime({ targets: '#contact .ccard', 
       opacity:[0,1], translateX:[60,0],
-      ease:'outElastic(1,.7)', duration:900,
+      easing: 'easeOutElastic(1,.7)', duration:900,
       delay: anime.stagger(100, {start: 300})
     });
   });
@@ -1629,7 +1625,7 @@ function runHeroAnimation() {
     translateY: [-80, 0],
     opacity: [0, 1],
     duration: 1000,
-    ease: 'outElastic(1, .8)'
+    easing: 'easeOutElastic(1, .8)'
   });
 
   anime({ targets: '.hero-eyebrow', 
@@ -1643,7 +1639,7 @@ function runHeroAnimation() {
     translateZ: 0,
     rotateX: [-90, 0],
     opacity: [0, 1],
-    ease: 'outElastic(1, .6)',
+    easing: 'easeOutElastic(1, .6)',
     duration: 1200,
     delay: anime.stagger(30, {start: 600})
   });
@@ -1658,7 +1654,7 @@ function runHeroAnimation() {
     translateY: [60, 0],
     scale: [0.9, 1],
     opacity: [0, 1],
-    ease: 'outElastic(1, 1)',
+    easing: 'easeOutElastic(1, 1)',
     duration: 1500,
     delay: 1200
   });
