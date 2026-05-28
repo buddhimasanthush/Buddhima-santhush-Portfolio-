@@ -742,9 +742,10 @@ textarea.cinput{resize:vertical;min-height:130px;}
 }
 
 
-/* Prevent FOUC for animated elements */
-.reveal, nav, .hero-eyebrow, h1.hero-name, .hero-role, .hero-desc, .hero-cta, .hero-photo-wrap,
-.skill-bar-item, .contact-subtitle, .cinput, .csend-btn, .ccard, .tech-chip, .edu-titem, .project-card, .cert-card, .section-title, .section-tag, .about-text p, .btn-primary {
+/* Prevent FOUC for exactly the elements animated by JS */
+nav, .hero-eyebrow, h1.hero-name, .hero-role, .hero-desc, .hero-cta, .hero-photo-wrap,
+.skill-bar-item, .contact-subtitle, .cinput, .csend-btn, .ccard, .tech-chip, .edu-titem, .project-card, .cert-card, .section-title, .section-tag, .about-text p, .btn-primary,
+.whatido-header, .learn-card, .edu-header, .projects-header, .certs-header, #contact h2 {
   opacity: 0;
 }
 </style>
