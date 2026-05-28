@@ -30,8 +30,8 @@ html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:var(--body);overflow-x:hidden;cursor:none;}
 
 /* CURSOR */
-.cursor{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s;}
-.cursor-ring{position:fixed;width:32px;height:32px;border:1.5px solid rgba(0,212,255,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.15s cubic-bezier(0.16, 1, 0.3, 1);}
+.cursor{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:transform 0.1s;}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1.5px solid rgba(0,212,255,0.4);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:all 0.15s cubic-bezier(0.16, 1, 0.3, 1);}
 .cursor.hovered{transform:translate(-50%,-50%) scale(0.5);background:var(--accent);box-shadow:0 0 10px var(--accent);}
 .cursor-ring.expand{width:48px;height:48px;border-color:var(--accent);background:rgba(0,212,255,0.05);box-shadow:0 0 15px rgba(0,212,255,0.25);}
 
