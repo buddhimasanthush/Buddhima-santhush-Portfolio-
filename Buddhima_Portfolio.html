@@ -741,6 +741,12 @@ textarea.cinput{resize:vertical;min-height:130px;}
   background:#1a1a2e;
 }
 
+
+/* Prevent FOUC for animated elements */
+.reveal, nav, .hero-eyebrow, h1.hero-name, .hero-role, .hero-desc, .hero-cta, .hero-photo-wrap,
+.skill-bar-item, .contact-subtitle, .cinput, .csend-btn, .ccard, .tech-chip, .edu-titem, .project-card, .cert-card, .section-title, .section-tag, .about-text p, .btn-primary {
+  opacity: 0;
+}
 </style>
 </head>
 <body>
@@ -1368,16 +1374,16 @@ function animateSection(sectionId, fn) {
 // -- ABOUT SECTION --
 (function(){
   const els = document.querySelectorAll('#about .section-tag, #about .section-title, #about .about-text p, #about .btn-primary');
-  els.forEach(el => { el.style.opacity = 0; el.style.transform = 'translateX(-50px)'; });
+
   const skillItems = document.querySelectorAll('#about .skill-bar-item');
-  skillItems.forEach(el => { el.style.opacity = 0; el.style.transform = 'translateX(40px)'; });
+
   animateSection('about', () => {
-    anime.animate(Array.from(els), {
+    anime({ targets: Array.from(els), 
       opacity: [0, 1], translateX: [-50, 0],
       ease: 'outExpo', duration: 900,
       delay: anime.stagger(90)
     });
-    anime.animate(Array.from(skillItems), {
+    anime({ targets: Array.from(skillItems), 
       opacity: [0, 1], translateX: [40, 0],
       ease: 'outExpo', duration: 800,
       delay: anime.stagger(80, {start: 300})
@@ -1394,15 +1400,15 @@ function animateSection(sectionId, fn) {
 (function(){
   const header = document.querySelectorAll('#whatido .section-tag, #whatido .whatido-title');
   const cards = document.querySelectorAll('#whatido .learn-card');
-  header.forEach(el => { el.style.opacity = 0; el.style.transform = 'translateY(-30px)'; });
-  cards.forEach(el => { el.style.opacity = 0; el.style.transform = 'translateY(60px) scale(0.9)'; });
+
+
   animateSection('whatido', () => {
-    anime.animate(Array.from(header), {
+    anime({ targets: Array.from(header), 
       opacity: [0,1], translateY: [-30,0],
       ease: 'outBack', duration: 700,
       delay: anime.stagger(100)
     });
-    anime.animate(Array.from(cards), {
+    anime({ targets: Array.from(cards), 
       opacity: [0,1], translateY: [60,0], scale: [0.9,1],
       ease: 'outElastic(1,.7)', duration: 1100,
       delay: anime.stagger(70, {start: 200})
@@ -1410,7 +1416,7 @@ function animateSection(sectionId, fn) {
     // Animate learn-icons with a spin
     document.querySelectorAll('#whatido .learn-icon').forEach((icon, i) => {
       setTimeout(() => {
-        anime.animate(icon, { rotate: ['-360deg','0deg'], duration: 600, ease: 'outBack' });
+        anime({ targets: icon,  rotate: ['-360deg','0deg'], duration: 600, ease: 'outBack' });
       }, 200 + i * 70);
     });
   });
@@ -1421,19 +1427,19 @@ function animateSection(sectionId, fn) {
   const header = document.querySelectorAll('#education .section-tag, #education .section-title');
   const items = document.querySelectorAll('#education .edu-titem');
   const dots = document.querySelectorAll('#education .edu-tdot');
-  header.forEach(el => { el.style.opacity = 0; el.style.transform = 'translateY(-20px)'; });
+
   items.forEach((el, i) => {
-    el.style.opacity = 0;
+
     el.style.transform = i % 2 === 0 ? 'translateX(-80px) rotateY(15deg)' : 'translateX(80px) rotateY(-15deg)';
   });
   dots.forEach(el => { el.style.transform += ' scale(0)'; });
   animateSection('education', () => {
-    anime.animate(Array.from(header), {
+    anime({ targets: Array.from(header), 
       opacity:[0,1], translateY:[-20,0], ease:'outExpo', duration:700, delay: anime.stagger(100)
     });
     items.forEach((el, i) => {
       setTimeout(() => {
-        anime.animate(el, {
+        anime({ targets: el, 
           opacity:[0,1],
           translateX: i % 2 === 0 ? [-80,0] : [80,0],
           rotateY: i % 2 === 0 ? [15,0] : [-15,0],
@@ -1441,7 +1447,7 @@ function animateSection(sectionId, fn) {
         });
       }, 200 + i * 180);
     });
-    anime.animate(Array.from(dots), {
+    anime({ targets: Array.from(dots), 
       scale:[0,1], ease:'outElastic(1,0.5)', duration:600,
       delay: anime.stagger(180, {start: 300})
     });
@@ -1452,16 +1458,16 @@ function animateSection(sectionId, fn) {
 (function(){
   const header = document.querySelectorAll('#projects .section-tag, #projects .section-title');
   const cards = document.querySelectorAll('#projects .project-card');
-  header.forEach(el => { el.style.opacity = 0; el.style.transform = 'translateY(-20px)'; });
+
   cards.forEach((el, i) => {
-    el.style.opacity = 0;
+
     el.style.transform = 'perspective(800px) rotateX(25deg) translateY(60px) scale(0.95)';
   });
   animateSection('projects', () => {
-    anime.animate(Array.from(header), {
+    anime({ targets: Array.from(header), 
       opacity:[0,1], translateY:[-20,0], ease:'outExpo', duration:700, delay: anime.stagger(100)
     });
-    anime.animate(Array.from(cards), {
+    anime({ targets: Array.from(cards), 
       opacity:[0,1], translateY:[60,0],
       rotateX:[25,0], scale:[0.95,1],
       ease:'outExpo', duration:1000,
@@ -1470,8 +1476,8 @@ function animateSection(sectionId, fn) {
     // Animate tech chips
     setTimeout(() => {
       const chips = document.querySelectorAll('#projects .tech-chip');
-      chips.forEach(c => { c.style.opacity = 0; c.style.transform = 'scale(0.5)'; });
-      anime.animate(Array.from(chips), {
+
+      anime({ targets: Array.from(chips), 
         opacity:[0,1], scale:[0.5,1],
         ease:'outBack', duration:400,
         delay: anime.stagger(25, {start: 600})
@@ -1484,13 +1490,13 @@ function animateSection(sectionId, fn) {
 (function(){
   const header = document.querySelectorAll('#certifications .section-tag, #certifications .section-title, #certifications p');
   const cards = document.querySelectorAll('#certifications .cert-card');
-  header.forEach(el => { el.style.opacity = 0; el.style.transform = 'translateY(-20px)'; });
-  cards.forEach(el => { el.style.opacity = 0; el.style.transform = 'translateY(50px) scale(0.95)'; });
+
+
   animateSection('certifications', () => {
-    anime.animate(Array.from(header), {
+    anime({ targets: Array.from(header), 
       opacity:[0,1], translateY:[-20,0], ease:'outExpo', duration:700, delay: anime.stagger(100)
     });
-    anime.animate(Array.from(cards), {
+    anime({ targets: Array.from(cards), 
       opacity:[0,1], translateY:[50,0], scale:[0.95,1],
       ease:'outExpo', duration:900,
       delay: anime.stagger(100, {start: 200})
@@ -1502,15 +1508,15 @@ function animateSection(sectionId, fn) {
 (function(){
   const formEls = document.querySelectorAll('#contact .section-tag, #contact h2, #contact .contact-subtitle, #contact .cinput, #contact .csend-btn');
   const ccards = document.querySelectorAll('#contact .ccard');
-  formEls.forEach(el => { el.style.opacity = 0; el.style.transform = 'translateX(-40px)'; });
-  ccards.forEach(el => { el.style.opacity = 0; el.style.transform = 'translateX(60px)'; });
+
+
   animateSection('contact', () => {
-    anime.animate(Array.from(formEls), {
+    anime({ targets: Array.from(formEls), 
       opacity:[0,1], translateX:[-40,0],
       ease:'outExpo', duration:800,
       delay: anime.stagger(80)
     });
-    anime.animate(Array.from(ccards), {
+    anime({ targets: Array.from(ccards), 
       opacity:[0,1], translateX:[60,0],
       ease:'outElastic(1,.7)', duration:900,
       delay: anime.stagger(100, {start: 300})
@@ -1618,20 +1624,20 @@ function runHeroAnimation() {
   }
 
   // Superb animation using anime.animate for v4 compatibility
-  anime.animate('nav', {
+  anime({ targets: 'nav', 
     translateY: [-80, 0],
     opacity: [0, 1],
     duration: 1000,
     ease: 'outElastic(1, .8)'
   });
 
-  anime.animate('.hero-eyebrow', {
+  anime({ targets: '.hero-eyebrow', 
     translateX: [-30, 0],
     opacity: [0, 1],
     delay: 400
   });
 
-  anime.animate('h1.hero-name .letter', {
+  anime({ targets: 'h1.hero-name .letter', 
     translateY: [40, 0],
     translateZ: 0,
     rotateX: [-90, 0],
@@ -1641,13 +1647,13 @@ function runHeroAnimation() {
     delay: anime.stagger(30, {start: 600})
   });
 
-  anime.animate(['.hero-role', '.hero-desc', '.hero-cta .btn-primary', '.hero-cta .btn-outline'], {
+  anime({ targets: ['.hero-role', '.hero-desc', '.hero-cta .btn-primary', '.hero-cta .btn-outline'], 
     translateY: [20, 0],
     opacity: [0, 1],
     delay: anime.stagger(100, {start: 1000})
   });
 
-  anime.animate('.hero-photo-wrap', {
+  anime({ targets: '.hero-photo-wrap', 
     translateY: [60, 0],
     scale: [0.9, 1],
     opacity: [0, 1],
