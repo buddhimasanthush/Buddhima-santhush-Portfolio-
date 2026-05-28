@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serenova Grand Hotel</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #C9A96E;
+    --gold-light: #E8D5A3;
+    --dark: #0D0D0D;
+    --dark2: #141414;
+    --dark3: #1C1C1C;
+    --dark4: #252525;
+    --muted: #888;
+    --light: #F5F0E8;
+    --white: #FFFFFF;
+    --serif: 'Cormorant Garamond', serif;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--light);
+    font-family: var(--sans);
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 4rem;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+    transition: background 0.4s;
+  }
+  nav.scrolled { background: rgba(13,13,13,0.97); border-bottom: 1px solid rgba(201,169,110,0.15); }
+  .nav-logo { font-family: var(--serif); font-size: 1.6rem; font-weight: 300; letter-spacing: 0.12em; color: var(--gold); text-decoration: none; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { color: rgba(245,240,232,0.8); text-decoration: none; font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: transparent; border: 1px solid var(--gold);
+    color: var(--gold); padding: 0.55rem 1.5rem;
+    font-family: var(--sans); font-size: 0.78rem; letter-spacing: 0.12em;
+    text-transform: uppercase; cursor: pointer; transition: all 0.2s;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--dark); }
+
+  /* HERO */
+  #hero {
+    height: 100vh; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1600&auto=format&fit=crop&q=80') center/cover no-repeat;
+  }
+  .hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.75) 100%);
+  }
+  .hero-pattern {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: repeating-linear-gradient(45deg, var(--gold) 0, var(--gold) 1px, transparent 0, transparent 50%);
+    background-size: 30px 30px;
+  }
+  .hero-content { position: relative; text-align: center; padding: 2rem; }
+  .hero-subtitle {
+    font-family: var(--sans); font-size: 0.75rem; font-weight: 400;
+    letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold);
+    margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 1s 0.3s forwards;
+  }
+  .hero-title {
+    font-family: var(--serif); font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 300; line-height: 1.05; letter-spacing: 0.02em;
+    color: var(--light); margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 1s 0.5s forwards;
+  }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-desc {
+    font-size: 1rem; font-weight: 300; color: rgba(245,240,232,0.6);
+    max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.8;
+    opacity: 0; animation: fadeUp 1s 0.7s forwards;
+  }
+  .hero-btns { display: flex; gap: 1.2rem; justify-content: center; opacity: 0; animation: fadeUp 1s 0.9s forwards; }
+  .btn-primary {
+    background: var(--gold); color: var(--dark);
+    padding: 1rem 2.5rem; border: none; cursor: pointer;
+    font-family: var(--sans); font-size: 0.8rem; font-weight: 500;
+    letter-spacing: 0.15em; text-transform: uppercase; transition: all 0.25s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--light);
+    padding: 1rem 2.5rem; border: 1px solid rgba(245,240,232,0.3); cursor: pointer;
+    font-family: var(--sans); font-size: 0.8rem; font-weight: 400;
+    letter-spacing: 0.15em; text-transform: uppercase; transition: all 0.25s;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* BOOKING BAR */
+  .booking-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: rgba(20,20,20,0.95); backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(201,169,110,0.2);
+    padding: 1.5rem 4rem; display: flex; gap: 1.5rem; align-items: flex-end; flex-wrap: wrap;
+  }
+  .booking-field { flex: 1; min-width: 140px; }
+  .booking-field label { display: block; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+  .booking-field input, .booking-field select {
+    width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(245,240,232,0.2);
+    color: var(--light); font-family: var(--sans); font-size: 0.9rem; font-weight: 300;
+    padding: 0.4rem 0; outline: none; transition: border-color 0.2s;
+  }
+  .booking-field input:focus, .booking-field select:focus { border-color: var(--gold); }
+  .booking-field select option { background: var(--dark3); }
+  .btn-book {
+    background: var(--gold); color: var(--dark); border: none;
+    padding: 0.85rem 2rem; cursor: pointer;
+    font-family: var(--sans); font-size: 0.78rem; font-weight: 500;
+    letter-spacing: 0.15em; text-transform: uppercase; white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .btn-book:hover { background: var(--gold-light); }
+
+  /* SECTIONS */
+  section { padding: 6rem 4rem; }
+  .section-tag { font-size: 0.7rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+  .section-title { font-family: var(--serif); font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 300; line-height: 1.2; color: var(--light); margin-bottom: 1.5rem; }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .section-line { width: 60px; height: 1px; background: var(--gold); margin-bottom: 2rem; }
+  .section-desc { color: rgba(245,240,232,0.55); line-height: 1.9; max-width: 520px; font-size: 0.95rem; }
+
+  /* ABOUT */
+  #about { background: var(--dark2); display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .about-img-wrap { position: relative; }
+  .about-img {
+    width: 100%; aspect-ratio: 3/4;
+    background: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop&q=80') center/cover no-repeat;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .about-img-badge {
+    position: absolute; bottom: -1.5rem; right: -1.5rem;
+    background: var(--gold); color: var(--dark);
+    padding: 1.5rem; text-align: center;
+  }
+  .about-img-badge .num { font-family: var(--serif); font-size: 2.5rem; font-weight: 600; display: block; }
+  .about-img-badge .txt { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2.5rem; }
+  .stat-item { border-left: 1px solid rgba(201,169,110,0.3); padding-left: 1rem; }
+  .stat-num { font-family: var(--serif); font-size: 2rem; font-weight: 300; color: var(--gold); }
+  .stat-label { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.2rem; }
+
+  /* ROOMS */
+  #rooms { background: var(--dark); }
+  .rooms-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1.5rem; }
+  .rooms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .room-card { background: var(--dark3); overflow: hidden; cursor: pointer; transition: transform 0.3s; }
+  .room-card:hover { transform: translateY(-6px); }
+  .room-img {
+    height: 240px;
+    background: linear-gradient(135deg, #1a1208, #2a1f0f);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .room-img::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.5), transparent); }
+  .room-icon { font-size: 3rem; opacity: 0.2; }
+  .room-badge {
+    position: absolute; top: 1rem; left: 1rem;
+    background: var(--gold); color: var(--dark);
+    font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em;
+    text-transform: uppercase; padding: 0.3rem 0.7rem;
+  }
+  .room-body { padding: 1.5rem; }
+  .room-name { font-family: var(--serif); font-size: 1.3rem; font-weight: 400; color: var(--light); margin-bottom: 0.4rem; }
+  .room-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+  .room-features { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+  .room-feat { font-size: 0.72rem; color: rgba(201,169,110,0.8); background: rgba(201,169,110,0.08); padding: 0.25rem 0.6rem; border: 1px solid rgba(201,169,110,0.15); }
+  .room-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem; }
+  .room-price { font-family: var(--serif); font-size: 1.5rem; color: var(--gold); }
+  .room-price span { font-family: var(--sans); font-size: 0.75rem; color: var(--muted); font-weight: 300; }
+  .btn-sm {
+    background: transparent; border: 1px solid var(--gold); color: var(--gold);
+    padding: 0.5rem 1rem; cursor: pointer; font-family: var(--sans);
+    font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.2s;
+  }
+  .btn-sm:hover { background: var(--gold); color: var(--dark); }
+
+  /* GALLERY */
+  #gallery { background: var(--dark2); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 220px);
+    gap: 0.8rem; margin-top: 3rem;
+  }
+  .gallery-item {
+    background: linear-gradient(135deg, #1a1208, #2a1f0f);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; overflow: hidden; position: relative;
+    transition: opacity 0.2s;
+  }
+  .gallery-item:hover { opacity: 0.85; }
+  .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  .gallery-item:nth-child(4) { grid-column: span 2; }
+  .gallery-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    padding: 1rem; font-size: 0.75rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(245,240,232,0.7);
+  }
+  .gallery-icon { font-size: 2.5rem; opacity: 0.12; }
+
+  /* AMENITIES */
+  #amenities { background: var(--dark); }
+  .amenities-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 3rem; }
+  .amenity-card { text-align: center; padding: 2rem 1rem; border: 1px solid rgba(201,169,110,0.08); transition: border-color 0.2s, transform 0.2s; }
+  .amenity-card:hover { border-color: rgba(201,169,110,0.3); transform: translateY(-4px); }
+  .amenity-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .amenity-name { font-family: var(--serif); font-size: 1.1rem; color: var(--light); margin-bottom: 0.5rem; }
+  .amenity-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.7; }
+
+  /* TESTIMONIALS */
+  #testimonials { background: var(--dark2); text-align: center; }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem; }
+  .testimonial { padding: 2rem; border: 1px solid rgba(201,169,110,0.08); text-align: left; }
+  .testimonial-stars { color: var(--gold); font-size: 0.9rem; margin-bottom: 1rem; letter-spacing: 0.1em; }
+  .testimonial-text { font-family: var(--serif); font-size: 1.05rem; font-style: italic; color: rgba(245,240,232,0.8); line-height: 1.8; margin-bottom: 1.5rem; }
+  .testimonial-author { font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
+  .testimonial-origin { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* CONTACT */
+  #contact { background: var(--dark); display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+  .contact-info { }
+  .contact-detail { display: flex; gap: 1rem; margin-bottom: 1.5rem; align-items: flex-start; }
+  .contact-detail-icon { font-size: 1rem; color: var(--gold); margin-top: 0.1rem; min-width: 20px; }
+  .contact-detail-text { font-size: 0.88rem; color: rgba(245,240,232,0.6); line-height: 1.7; }
+  .contact-form { }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { margin-bottom: 1.2rem; }
+  .form-group label { display: block; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%; background: var(--dark3); border: 1px solid rgba(255,255,255,0.06);
+    color: var(--light); font-family: var(--sans); font-size: 0.88rem; font-weight: 300;
+    padding: 0.75rem 1rem; outline: none; transition: border-color 0.2s; resize: none;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: rgba(201,169,110,0.4); }
+  .form-group select option { background: var(--dark3); }
+  .form-group textarea { height: 100px; }
+
+  /* FOOTER */
+  footer { background: #090909; border-top: 1px solid rgba(201,169,110,0.1); padding: 4rem 4rem 2rem; }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-brand { }
+  .footer-logo { font-family: var(--serif); font-size: 1.8rem; font-weight: 300; color: var(--gold); margin-bottom: 1rem; }
+  .footer-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.8; max-width: 280px; }
+  .footer-col h4 { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.6rem; }
+  .footer-col ul li a { font-size: 0.83rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-col ul li a:hover { color: var(--light); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-size: 0.75rem; color: rgba(136,136,136,0.6); }
+  .footer-socials { display: flex; gap: 1rem; }
+  .footer-social { width: 32px; height: 32px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: var(--muted); text-decoration: none; transition: all 0.2s; }
+  .footer-social:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* MODAL OVERLAY */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.92); display: none;
+    align-items: center; justify-content: center; padding: 2rem;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--dark2); max-width: 600px; width: 100%;
+    border: 1px solid rgba(201,169,110,0.15); max-height: 90vh; overflow-y: auto;
+  }
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 2rem; border-bottom: 1px solid rgba(201,169,110,0.1);
+  }
+  .modal-title { font-family: var(--serif); font-size: 1.5rem; font-weight: 300; color: var(--light); }
+  .modal-close { background: none; border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; transition: color 0.2s; }
+  .modal-close:hover { color: var(--light); }
+  .modal-body { padding: 2rem; }
+  .modal-steps { display: flex; gap: 0; margin-bottom: 2rem; }
+  .modal-step {
+    flex: 1; text-align: center; padding: 0.8rem;
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--muted); border-bottom: 2px solid rgba(255,255,255,0.06); cursor: pointer;
+  }
+  .modal-step.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .step-panel { display: none; }
+  .step-panel.active { display: block; }
+  .booking-summary { background: var(--dark3); padding: 1.2rem; margin-bottom: 1.5rem; }
+  .booking-summary h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--light); margin-bottom: 0.8rem; }
+  .summary-row { display: flex; justify-content: space-between; font-size: 0.83rem; margin-bottom: 0.4rem; }
+  .summary-row .label { color: var(--muted); }
+  .summary-row .value { color: var(--light); }
+  .summary-total { border-top: 1px solid rgba(255,255,255,0.08); margin-top: 0.8rem; padding-top: 0.8rem; display: flex; justify-content: space-between; }
+  .summary-total .label { color: var(--gold); font-size: 0.85rem; }
+  .summary-total .value { font-family: var(--serif); font-size: 1.4rem; color: var(--gold); }
+  .payment-methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+  .payment-method {
+    border: 1px solid rgba(255,255,255,0.08); padding: 0.8rem;
+    text-align: center; cursor: pointer; font-size: 0.75rem;
+    color: var(--muted); transition: all 0.2s;
+  }
+  .payment-method.active { border-color: var(--gold); color: var(--gold); }
+  .payment-method:hover { border-color: rgba(201,169,110,0.4); }
+  .payment-icon { font-size: 1.3rem; display: block; margin-bottom: 0.3rem; }
+  .success-screen { text-align: center; padding: 2rem 0; display: none; }
+  .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .success-title { font-family: var(--serif); font-size: 2rem; color: var(--light); margin-bottom: 0.5rem; }
+  .success-sub { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+  .success-ref { font-size: 0.78rem; color: var(--gold); margin-top: 1rem; letter-spacing: 0.2em; }
+
+  /* ADMIN PANEL */
+  #admin-panel {
+    position: fixed; inset: 0; z-index: 300;
+    background: #0a0a0a; display: none; overflow: hidden;
+  }
+  #admin-panel.active { display: flex; }
+  .admin-sidebar {
+    width: 240px; background: var(--dark2); border-right: 1px solid rgba(201,169,110,0.1);
+    padding: 2rem 0; display: flex; flex-direction: column;
+  }
+  .admin-logo { font-family: var(--serif); font-size: 1.3rem; color: var(--gold); padding: 0 1.5rem; margin-bottom: 2rem; letter-spacing: 0.05em; }
+  .admin-nav-item {
+    display: flex; align-items: center; gap: 0.8rem;
+    padding: 0.85rem 1.5rem; font-size: 0.83rem; color: var(--muted);
+    cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent;
+  }
+  .admin-nav-item:hover { color: var(--light); background: rgba(255,255,255,0.03); }
+  .admin-nav-item.active { color: var(--gold); border-left-color: var(--gold); background: rgba(201,169,110,0.05); }
+  .admin-nav-icon { font-size: 0.95rem; min-width: 18px; }
+  .admin-main { flex: 1; overflow-y: auto; padding: 2rem; }
+  .admin-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+  .admin-page-title { font-family: var(--serif); font-size: 1.8rem; font-weight: 300; color: var(--light); }
+  .admin-close { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--muted); padding: 0.5rem 1rem; cursor: pointer; font-family: var(--sans); font-size: 0.78rem; letter-spacing: 0.1em; transition: all 0.2s; }
+  .admin-close:hover { border-color: var(--gold); color: var(--gold); }
+  .admin-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+  .admin-stat { background: var(--dark3); padding: 1.2rem; border: 1px solid rgba(255,255,255,0.04); }
+  .admin-stat-label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+  .admin-stat-value { font-family: var(--serif); font-size: 2rem; font-weight: 300; color: var(--light); }
+  .admin-stat-change { font-size: 0.72rem; margin-top: 0.3rem; }
+  .admin-stat-change.up { color: #6fcf97; }
+  .admin-stat-change.down { color: #eb5757; }
+  .admin-table-wrap { background: var(--dark3); border: 1px solid rgba(255,255,255,0.04); overflow: hidden; }
+  .admin-table-header { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .admin-table-title { font-size: 0.85rem; font-weight: 500; color: var(--light); }
+  .admin-badge { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3rem 0.7rem; }
+  .badge-gold { background: rgba(201,169,110,0.12); color: var(--gold); }
+  .badge-green { background: rgba(111,207,151,0.12); color: #6fcf97; }
+  .badge-red { background: rgba(235,87,87,0.12); color: #eb5757; }
+  .badge-blue { background: rgba(86,186,219,0.12); color: #56badb; }
+  table { width: 100%; border-collapse: collapse; }
+  table th { padding: 0.7rem 1.5rem; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); text-align: left; border-bottom: 1px solid rgba(255,255,255,0.04); font-weight: 400; }
+  table td { padding: 0.9rem 1.5rem; font-size: 0.83rem; color: rgba(245,240,232,0.75); border-bottom: 1px solid rgba(255,255,255,0.03); }
+  table tr:last-child td { border-bottom: none; }
+  table tr:hover td { background: rgba(255,255,255,0.02); }
+  .admin-section { display: none; }
+  .admin-section.active { display: block; }
+  .room-mgmt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .room-mgmt-card { background: var(--dark3); padding: 1.2rem; border: 1px solid rgba(255,255,255,0.04); }
+  .room-mgmt-name { font-family: var(--serif); font-size: 1rem; color: var(--light); margin-bottom: 0.3rem; }
+  .room-mgmt-price { font-size: 0.78rem; color: var(--gold); margin-bottom: 0.8rem; }
+  .room-status { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; margin-bottom: 0.8rem; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .dot-green { background: #6fcf97; }
+  .dot-red { background: #eb5757; }
+  .dot-amber { background: #f2c94c; }
+  .toggle-wrap { display: flex; align-items: center; justify-content: space-between; }
+  .toggle { position: relative; display: inline-block; width: 38px; height: 20px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: rgba(255,255,255,0.1); border-radius: 20px; transition: 0.2s; }
+  .toggle-slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background: var(--muted); border-radius: 50%; transition: 0.2s; }
+  .toggle input:checked + .toggle-slider { background: rgba(201,169,110,0.3); }
+  .toggle input:checked + .toggle-slider:before { transform: translateX(18px); background: var(--gold); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RESPONSIVE */
+  /* TOAST NOTIFICATION */
+  .toast {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 9999;
+    background: var(--dark2); border: 1px solid rgba(201,169,110,0.3);
+    padding: 1.2rem 1.5rem; min-width: 300px; max-width: 380px;
+    display: flex; align-items: flex-start; gap: 1rem;
+    transform: translateY(120px); opacity: 0;
+    transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
+  .toast-icon { font-size: 1.4rem; margin-top: 0.1rem; }
+  .toast-content { flex: 1; }
+  .toast-title { font-family: var(--serif); font-size: 1.05rem; color: var(--light); margin-bottom: 0.25rem; }
+  .toast-msg { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+  .toast-close { background: none; border: none; color: var(--muted); font-size: 1rem; cursor: pointer; padding: 0; line-height: 1; transition: color 0.2s; }
+  .toast-close:hover { color: var(--light); }
+  .toast-bar { position: absolute; bottom: 0; left: 0; height: 2px; background: var(--gold); animation: none; }
+  .toast.show .toast-bar { animation: toastBar 4s linear forwards; }
+  @keyframes toastBar { from { width: 100%; } to { width: 0%; } }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 2rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 2rem; }
+    #about { grid-template-columns: 1fr; }
+    .rooms-grid { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; }
+    .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 1; }
+    .gallery-item:nth-child(4) { grid-column: span 1; }
+    .amenities-grid { grid-template-columns: repeat(2, 1fr); }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    #contact { grid-template-columns: 1fr; }
+    .booking-bar { padding: 1.5rem 2rem; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .admin-stats { grid-template-columns: repeat(2, 1fr); }
+    .room-mgmt-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#" class="nav-logo">Serenova</a>
+  <ul class="nav-links">
+    <li><a href="#rooms">Rooms</a></li>
+    <li><a href="#amenities">Amenities</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('admin-panel').classList.add('active')">Admin</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="hero-content">
+    <p class="hero-subtitle">Luxury Redefined — Est. 1998</p>
+    <h1 class="hero-title">Where Elegance<br>Meets <em>Serenity</em></h1>
+    <p class="hero-desc">Nestled along the pristine coastline, Serenova Grand offers an unparalleled retreat for discerning travellers seeking timeless luxury.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="openBooking()">Reserve a Room</button>
+      <button class="btn-outline" onclick="document.getElementById('rooms').scrollIntoView({behavior:'smooth'})">Explore Rooms</button>
+    </div>
+  </div>
+
+  <div class="booking-bar">
+    <div class="booking-field">
+      <label>Check In</label>
+      <input type="date" id="checkin" />
+    </div>
+    <div class="booking-field">
+      <label>Check Out</label>
+      <input type="date" id="checkout" />
+    </div>
+    <div class="booking-field">
+      <label>Guests</label>
+      <select>
+        <option>1 Adult</option>
+        <option>2 Adults</option>
+        <option>2 Adults, 1 Child</option>
+        <option>2 Adults, 2 Children</option>
+      </select>
+    </div>
+    <div class="booking-field">
+      <label>Room Type</label>
+      <select id="quick-room">
+        <option>Any Room</option>
+        <option>Deluxe King</option>
+        <option>Ocean Suite</option>
+        <option>Presidential Villa</option>
+      </select>
+    </div>
+    <button class="btn-book" onclick="openBooking()">Check Availability</button>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-img-wrap">
+    <div class="about-img"></div>
+    <div class="about-img-badge">
+      <span class="num">25</span>
+      <span class="txt">Years of Excellence</span>
+    </div>
+  </div>
+  <div>
+    <p class="section-tag">Our Story</p>
+    <h2 class="section-title">A Legacy of<br><em>Timeless Hospitality</em></h2>
+    <div class="section-line"></div>
+    <p class="section-desc">For over two decades, Serenova Grand has set the benchmark for luxury hospitality. Every detail — from the hand-curated interiors to the bespoke dining experiences — is crafted to create lasting memories for our cherished guests.</p>
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-num">142</div>
+        <div class="stat-label">Luxury Rooms</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">8</div>
+        <div class="stat-label">Dining Venues</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">4.9</div>
+        <div class="stat-label">Guest Rating</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">Awards Won</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROOMS -->
+<section id="rooms">
+  <div class="rooms-header">
+    <div>
+      <p class="section-tag">Accommodation</p>
+      <h2 class="section-title">Our <em>Finest</em> Rooms</h2>
+    </div>
+    <p class="section-desc" style="max-width:300px;">Each space is a sanctuary — designed with meticulous attention to comfort and elegance.</p>
+  </div>
+  <div class="rooms-grid">
+    <div class="room-card" onclick="openBookingRoom('Deluxe King Room', 280)">
+      <div class="room-img" style="background: url('https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&auto=format&fit=crop&q=80') center/cover no-repeat;">
+        <div class="room-badge">Most Popular</div>
+      </div>
+      <div class="room-body">
+        <h3 class="room-name">Deluxe King Room</h3>
+        <p class="room-desc">Spacious retreat with a plush king bed, city views, and premium finishes throughout.</p>
+        <div class="room-features">
+          <span class="room-feat">42㎡</span>
+          <span class="room-feat">King Bed</span>
+          <span class="room-feat">City View</span>
+          <span class="room-feat">Free WiFi</span>
+        </div>
+        <div class="room-footer">
+          <div class="room-price">රු. 84,000<span>/රාත්‍රිය</span></div>
+          <button class="btn-sm">Book Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="room-card" onclick="openBookingRoom('Ocean Suite', 520)">
+      <div class="room-img" style="background: url('https://images.unsplash.com/photo-1602002418082-a4443e081dd1?w=600&auto=format&fit=crop&q=80') center/cover no-repeat;">
+        <div class="room-badge">Sea View</div>
+      </div>
+      <div class="room-body">
+        <h3 class="room-name">Ocean Suite</h3>
+        <p class="room-desc">Wake up to breathtaking ocean vistas from your private balcony and deep-soak tub.</p>
+        <div class="room-features">
+          <span class="room-feat">68㎡</span>
+          <span class="room-feat">King Bed</span>
+          <span class="room-feat">Ocean View</span>
+          <span class="room-feat">Balcony</span>
+        </div>
+        <div class="room-footer">
+          <div class="room-price">රු. 1,56,000<span>/රාත්‍රිය</span></div>
+          <button class="btn-sm">Book Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="room-card" onclick="openBookingRoom('Presidential Villa', 1200)">
+      <div class="room-img" style="background: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600&auto=format&fit=crop&q=80') center/cover no-repeat;">
+        <div class="room-badge">Exclusive</div>
+      </div>
+      <div class="room-body">
+        <h3 class="room-name">Presidential Villa</h3>
+        <p class="room-desc">The pinnacle of luxury — a private villa with pool, butler service, and panoramic views.</p>
+        <div class="room-features">
+          <span class="room-feat">180㎡</span>
+          <span class="room-feat">2 Bedrooms</span>
+          <span class="room-feat">Private Pool</span>
+          <span class="room-feat">Butler</span>
+        </div>
+        <div class="room-footer">
+          <div class="room-price">රු. 3,60,000<span>/රාත්‍රිය</span></div>
+          <button class="btn-sm">Book Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <p class="section-tag">Visual Journey</p>
+  <h2 class="section-title">A Glimpse of <em>Paradise</em></h2>
+  <div class="gallery-grid">
+    <div class="gallery-item" style="background: url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=900&auto=format&fit=crop&q=80') center/cover no-repeat;"><div class="gallery-label">Grand Lobby</div></div>
+    <div class="gallery-item" style="background: url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&auto=format&fit=crop&q=80') center/cover no-repeat;"><div class="gallery-label">Ocean View</div></div>
+    <div class="gallery-item" style="background: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&auto=format&fit=crop&q=80') center/cover no-repeat;"><div class="gallery-label">Fine Dining</div></div>
+    <div class="gallery-item" style="grid-column: span 2; background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&auto=format&fit=crop&q=80') center/cover no-repeat;"><div class="gallery-label">Infinity Pool</div></div>
+    <div class="gallery-item" style="background: url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=500&auto=format&fit=crop&q=80') center/cover no-repeat;"><div class="gallery-label">Spa & Wellness</div></div>
+    <div class="gallery-item" style="background: url('https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=500&auto=format&fit=crop&q=80') center/cover no-repeat;"><div class="gallery-label">Presidential Suite</div></div>
+  </div>
+</section>
+
+<!-- AMENITIES -->
+<section id="amenities">
+  <div style="text-align:center; margin-bottom: 0;">
+    <p class="section-tag">World-Class Facilities</p>
+    <h2 class="section-title">Every <em>Comfort</em> Imagined</h2>
+  </div>
+  <div class="amenities-grid">
+    <div class="amenity-card"><div class="amenity-icon">🏊</div><h4 class="amenity-name">Infinity Pool</h4><p class="amenity-desc">Panoramic 40-metre pool overlooking the ocean, open 6am to midnight.</p></div>
+    <div class="amenity-card"><div class="amenity-icon">💆</div><h4 class="amenity-name">Serenova Spa</h4><p class="amenity-desc">Award-winning spa with 14 treatment rooms, sauna, and steam sanctuary.</p></div>
+    <div class="amenity-card"><div class="amenity-icon">🍽</div><h4 class="amenity-name">Fine Dining</h4><p class="amenity-desc">8 unique culinary experiences from Michelin-starred gastronomy to casual beachside fare.</p></div>
+    <div class="amenity-card"><div class="amenity-icon">🏋</div><h4 class="amenity-name">Fitness Centre</h4><p class="amenity-desc">State-of-the-art equipment, personal trainers, and yoga classes daily.</p></div>
+    <div class="amenity-card"><div class="amenity-icon">🤿</div><h4 class="amenity-name">Water Sports</h4><p class="amenity-desc">Diving, snorkelling, kayaking, and sunset sailing expeditions.</p></div>
+    <div class="amenity-card"><div class="amenity-icon">👶</div><h4 class="amenity-name">Kids Club</h4><p class="amenity-desc">Supervised activities and entertainment for our youngest guests.</p></div>
+    <div class="amenity-card"><div class="amenity-icon">🚗</div><h4 class="amenity-name">Valet Parking</h4><p class="amenity-desc">Complimentary valet service and chauffeur-driven transfers.</p></div>
+    <div class="amenity-card"><div class="amenity-icon">📶</div><h4 class="amenity-name">High-Speed WiFi</h4><p class="amenity-desc">Fibre-optic gigabit connectivity throughout all areas of the resort.</p></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <p class="section-tag">Guest Voices</p>
+  <h2 class="section-title">What Our Guests <em>Say</em></h2>
+  <div class="testimonials-grid">
+    <div class="testimonial">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"An extraordinary escape. The attention to detail is unmatched and the staff made us feel like royalty throughout our stay."</p>
+      <div class="testimonial-author">Alexandra M.</div>
+      <div class="testimonial-origin">London, United Kingdom</div>
+    </div>
+    <div class="testimonial">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"The Ocean Suite exceeded all expectations. Waking up to that view every morning was something I'll never forget. We will return."</p>
+      <div class="testimonial-author">Hiroshi T.</div>
+      <div class="testimonial-origin">Tokyo, Japan</div>
+    </div>
+    <div class="testimonial">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"From the moment we arrived to check-out, every interaction was impeccable. The spa is simply world-class."</p>
+      <div class="testimonial-author">Isabelle & Marc D.</div>
+      <div class="testimonial-origin">Paris, France</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-info">
+    <p class="section-tag">Get in Touch</p>
+    <h2 class="section-title">We'd Love to<br><em>Hear From You</em></h2>
+    <div class="section-line"></div>
+    <p class="section-desc" style="margin-bottom: 2rem;">Our guest relations team is available 24/7 to assist with reservations, enquiries, and special requests.</p>
+    <div class="contact-detail">
+      <div class="contact-detail-icon">📍</div>
+      <div class="contact-detail-text">12 Coastal Avenue, Serenova Bay<br>Western Province, Sri Lanka</div>
+    </div>
+    <div class="contact-detail">
+      <div class="contact-detail-icon">📞</div>
+      <div class="contact-detail-text">+94 11 234 5678<br>+94 77 234 5678</div>
+    </div>
+    <div class="contact-detail">
+      <div class="contact-detail-icon">✉</div>
+      <div class="contact-detail-text">reservations@serenovagrand.com<br>concierge@serenovagrand.com</div>
+    </div>
+  </div>
+  <div class="contact-form">
+    <div class="form-row">
+      <div class="form-group"><label>First Name</label><input type="text" id="cf-fname" placeholder="James"></div>
+      <div class="form-group"><label>Last Name</label><input type="text" id="cf-lname" placeholder="Wilson"></div>
+    </div>
+    <div class="form-group"><label>Email Address</label><input type="email" id="cf-email" placeholder="james@example.com"></div>
+    <div class="form-group">
+      <label>Enquiry Type</label>
+      <select id="cf-type">
+        <option>Reservation Enquiry</option>
+        <option>Special Request</option>
+        <option>Event Planning</option>
+        <option>Feedback</option>
+        <option>General Information</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Message</label><textarea id="cf-message" placeholder="Tell us how we can assist you..."></textarea></div>
+    <button class="btn-primary" style="width:100%" id="cf-btn" onclick="sendContactForm()">Send Message</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">Serenova Grand</div>
+      <p class="footer-desc">Where every moment is crafted to perfection. Luxury, serenity, and timeless elegance — all in one extraordinary destination.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#rooms">Rooms & Suites</a></li>
+        <li><a href="#amenities">Amenities</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Spa & Wellness</a></li>
+        <li><a href="#">Fine Dining</a></li>
+        <li><a href="#">Events & Weddings</a></li>
+        <li><a href="#">Concierge</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">FAQs</a></li>
+        <li><a href="#">Cancellation Policy</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 Serenova Grand Hotel. All rights reserved.</p>
+    <div class="footer-socials">
+      <a href="#" class="footer-social">f</a>
+      <a href="#" class="footer-social">in</a>
+      <a href="#" class="footer-social">tw</a>
+      <a href="#" class="footer-social">yt</a>
+    </div>
+  </div>
+</footer>
+
+<!-- BOOKING MODAL -->
+<div class="modal-overlay" id="booking-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Reserve Your Stay</h3>
+      <button class="modal-close" onclick="closeBooking()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-steps">
+        <div class="modal-step active" id="step-tab-1" onclick="goStep(1)">1. Details</div>
+        <div class="modal-step" id="step-tab-2" onclick="goStep(2)">2. Summary</div>
+        <div class="modal-step" id="step-tab-3" onclick="goStep(3)">3. Payment</div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="step-panel active" id="step-1">
+        <div class="form-group"><label>Room Type</label>
+          <select id="modal-room">
+            <option value="Deluxe King Room|84000">Deluxe King Room — රු. 84,000/රාත්‍රිය</option>
+            <option value="Ocean Suite|156000">Ocean Suite — රු. 1,56,000/රාත්‍රිය</option>
+            <option value="Presidential Villa|360000">Presidential Villa — රු. 3,60,000/රාත්‍රිය</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Check In</label><input type="date" id="modal-checkin"></div>
+          <div class="form-group"><label>Check Out</label><input type="date" id="modal-checkout"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Adults</label>
+            <select id="modal-adults"><option>1</option><option selected>2</option><option>3</option><option>4</option></select>
+          </div>
+          <div class="form-group"><label>Children</label>
+            <select id="modal-children"><option selected>0</option><option>1</option><option>2</option></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>First Name</label><input type="text" id="modal-fname" placeholder="James"></div>
+          <div class="form-group"><label>Last Name</label><input type="text" id="modal-lname" placeholder="Wilson"></div>
+        </div>
+        <div class="form-group"><label>Email</label><input type="email" id="modal-email" placeholder="james@example.com"></div>
+        <div class="form-group" style="margin-top:0.5rem">
+          <label style="display:flex;align-items:center;gap:0.6rem;cursor:pointer">
+            <input type="checkbox" id="modal-breakfast"> Breakfast Include (+රු. 10,500/රාත්‍රිය/පුද්ගල)
+          </label>
+        </div>
+        <button class="btn-primary" style="width:100%;margin-top:0.5rem" onclick="goStep(2)">Continue to Summary →</button>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-panel" id="step-2">
+        <div class="booking-summary">
+          <h3>Booking Summary</h3>
+          <div class="summary-row"><span class="label">Room</span><span class="value" id="sum-room">—</span></div>
+          <div class="summary-row"><span class="label">Check In</span><span class="value" id="sum-checkin">—</span></div>
+          <div class="summary-row"><span class="label">Check Out</span><span class="value" id="sum-checkout">—</span></div>
+          <div class="summary-row"><span class="label">Nights</span><span class="value" id="sum-nights">—</span></div>
+          <div class="summary-row"><span class="label">Guests</span><span class="value" id="sum-guests">—</span></div>
+          <div class="summary-row" id="sum-breakfast-row" style="display:none"><span class="label">Breakfast</span><span class="value" id="sum-breakfast">—</span></div>
+          <div class="summary-row"><span class="label">Room Total</span><span class="value" id="sum-room-total">—</span></div>
+          <div class="summary-row"><span class="label">Taxes (10%)</span><span class="value" id="sum-tax">—</span></div>
+          <div class="summary-total"><span class="label">Total Amount</span><span class="value" id="sum-total">—</span></div>
+        </div>
+        <div style="display:flex;gap:1rem">
+          <button class="btn-outline" style="flex:1" onclick="goStep(1)">← Back</button>
+          <button class="btn-primary" style="flex:1" onclick="goStep(3)">Proceed to Payment →</button>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-panel" id="step-3">
+        <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1rem;letter-spacing:0.05em">Select payment method</p>
+        <div class="payment-methods">
+          <div class="payment-method active" onclick="selectPayment(this)"><span class="payment-icon">💳</span>Credit Card</div>
+          <div class="payment-method" onclick="selectPayment(this)"><span class="payment-icon">🏦</span>Bank Transfer</div>
+          <div class="payment-method" onclick="selectPayment(this)"><span class="payment-icon">📱</span>Digital Wallet</div>
+        </div>
+        <div id="card-fields">
+          <div class="form-group"><label>Card Number</label><input type="text" placeholder="4242 4242 4242 4242" maxlength="19" oninput="formatCard(this)"></div>
+          <div class="form-row">
+            <div class="form-group"><label>Expiry</label><input type="text" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)"></div>
+            <div class="form-group"><label>CVV</label><input type="text" placeholder="•••" maxlength="3"></div>
+          </div>
+          <div class="form-group"><label>Cardholder Name</label><input type="text" id="card-name" placeholder="James Wilson"></div>
+        </div>
+        <div class="summary-total" style="margin-bottom:1.2rem">
+          <span class="label">Amount to Pay</span>
+          <span class="value" id="pay-total">—</span>
+        </div>
+        <div style="display:flex;gap:1rem">
+          <button class="btn-outline" style="flex:1" onclick="goStep(2)">← Back</button>
+          <button class="btn-primary" style="flex:2" onclick="confirmBooking()">Confirm &amp; Pay</button>
+        </div>
+      </div>
+
+      <!-- Success -->
+      <div class="success-screen" id="success-screen">
+        <div class="success-icon">✦</div>
+        <h3 class="success-title">Booking Confirmed!</h3>
+        <p class="success-sub">Thank you for choosing Serenova Grand. A confirmation has been sent to your email. We look forward to welcoming you.</p>
+        <p class="success-ref" id="booking-ref">Booking Reference: —</p>
+        <button class="btn-primary" style="margin-top:1.5rem" onclick="closeBooking()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel">
+  <div class="admin-sidebar">
+    <div class="admin-logo">Serenova Admin</div>
+    <div class="admin-nav-item active" onclick="adminNav(this,'dashboard')"><span class="admin-nav-icon">◈</span> Dashboard</div>
+    <div class="admin-nav-item" onclick="adminNav(this,'bookings')"><span class="admin-nav-icon">◉</span> Bookings</div>
+    <div class="admin-nav-item" onclick="adminNav(this,'rooms')"><span class="admin-nav-icon">◫</span> Room Management</div>
+    <div class="admin-nav-item" onclick="adminNav(this,'guests')"><span class="admin-nav-icon">◎</span> Guests</div>
+    <div class="admin-nav-item" onclick="adminNav(this,'revenue')"><span class="admin-nav-icon">◈</span> Revenue</div>
+  </div>
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <h2 class="admin-page-title" id="admin-page-title">Dashboard</h2>
+      <button class="admin-close" onclick="document.getElementById('admin-panel').classList.remove('active')">✕ Exit Admin</button>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="admin-section active" id="admin-dashboard">
+      <div class="admin-stats">
+        <div class="admin-stat">
+          <div class="admin-stat-label">Total Bookings</div>
+          <div class="admin-stat-value">248</div>
+          <div class="admin-stat-change up">↑ 12% this month</div>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat-label">Revenue (Nov)</div>
+          <div class="admin-stat-value">$94.2k</div>
+          <div class="admin-stat-change up">↑ 8.5% vs last month</div>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat-label">Occupancy Rate</div>
+          <div class="admin-stat-value">87%</div>
+          <div class="admin-stat-change up">↑ 3% vs last week</div>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat-label">Avg Stay (nights)</div>
+          <div class="admin-stat-value">3.4</div>
+          <div class="admin-stat-change down">↓ 0.2 vs last month</div>
+        </div>
+      </div>
+      <div class="admin-table-wrap">
+        <div class="admin-table-header">
+          <span class="admin-table-title">Recent Bookings</span>
+          <span class="admin-badge badge-gold">Live</span>
+        </div>
+        <table>
+          <thead><tr><th>Guest</th><th>Room</th><th>Check In</th><th>Check Out</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Alexandra Moore</td><td>Ocean Suite</td><td>Mar 18, 2025</td><td>Mar 22, 2025</td><td>$2,080</td><td><span class="admin-badge badge-green">Confirmed</span></td></tr>
+            <tr><td>Hiroshi Tanaka</td><td>Presidential Villa</td><td>Mar 19, 2025</td><td>Mar 24, 2025</td><td>$6,000</td><td><span class="admin-badge badge-gold">Pending</span></td></tr>
+            <tr><td>Isabelle Dupont</td><td>Deluxe King</td><td>Mar 20, 2025</td><td>Mar 23, 2025</td><td>$840</td><td><span class="admin-badge badge-green">Confirmed</span></td></tr>
+            <tr><td>James Wilson</td><td>Ocean Suite</td><td>Mar 21, 2025</td><td>Mar 25, 2025</td><td>$2,080</td><td><span class="admin-badge badge-blue">Checked In</span></td></tr>
+            <tr><td>Priya Sharma</td><td>Deluxe King</td><td>Mar 22, 2025</td><td>Mar 24, 2025</td><td>$560</td><td><span class="admin-badge badge-red">Cancelled</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Bookings -->
+    <div class="admin-section" id="admin-bookings">
+      <div class="admin-table-wrap">
+        <div class="admin-table-header"><span class="admin-table-title">All Bookings</span><span class="admin-badge badge-gold">248 Total</span></div>
+        <table>
+          <thead><tr><th>Ref #</th><th>Guest</th><th>Room</th><th>Nights</th><th>Amount</th><th>Payment</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>SRN-2841</td><td>Alexandra Moore</td><td>Ocean Suite</td><td>4</td><td>$2,080</td><td>Credit Card</td><td><span class="admin-badge badge-green">Confirmed</span></td></tr>
+            <tr><td>SRN-2840</td><td>Hiroshi Tanaka</td><td>Presidential Villa</td><td>5</td><td>$6,000</td><td>Bank Transfer</td><td><span class="admin-badge badge-gold">Pending</span></td></tr>
+            <tr><td>SRN-2839</td><td>Isabelle Dupont</td><td>Deluxe King</td><td>3</td><td>$840</td><td>Digital Wallet</td><td><span class="admin-badge badge-green">Confirmed</span></td></tr>
+            <tr><td>SRN-2838</td><td>James Wilson</td><td>Ocean Suite</td><td>4</td><td>$2,288</td><td>Credit Card</td><td><span class="admin-badge badge-blue">Checked In</span></td></tr>
+            <tr><td>SRN-2837</td><td>Priya Sharma</td><td>Deluxe King</td><td>2</td><td>$560</td><td>Credit Card</td><td><span class="admin-badge badge-red">Cancelled</span></td></tr>
+            <tr><td>SRN-2836</td><td>Carlos Mendez</td><td>Presidential Villa</td><td>7</td><td>$8,400</td><td>Credit Card</td><td><span class="admin-badge badge-green">Confirmed</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Rooms -->
+    <div class="admin-section" id="admin-rooms">
+      <div class="room-mgmt-grid">
+        <div class="room-mgmt-card">
+          <div class="room-mgmt-name">Deluxe King Room</div>
+          <div class="room-mgmt-price">$280 / night</div>
+          <div class="room-status"><span class="status-dot dot-green"></span> Available (12 rooms)</div>
+          <div class="toggle-wrap"><span style="font-size:0.75rem;color:var(--muted)">Active</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+        </div>
+        <div class="room-mgmt-card">
+          <div class="room-mgmt-name">Ocean Suite</div>
+          <div class="room-mgmt-price">$520 / night</div>
+          <div class="room-status"><span class="status-dot dot-amber"></span> Limited (3 rooms)</div>
+          <div class="toggle-wrap"><span style="font-size:0.75rem;color:var(--muted)">Active</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+        </div>
+        <div class="room-mgmt-card">
+          <div class="room-mgmt-name">Presidential Villa</div>
+          <div class="room-mgmt-price">$1,200 / night</div>
+          <div class="room-status"><span class="status-dot dot-red"></span> Booked (0 available)</div>
+          <div class="toggle-wrap"><span style="font-size:0.75rem;color:var(--muted)">Active</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+        </div>
+        <div class="room-mgmt-card">
+          <div class="room-mgmt-name">Garden Terrace Room</div>
+          <div class="room-mgmt-price">$195 / night</div>
+          <div class="room-status"><span class="status-dot dot-green"></span> Available (8 rooms)</div>
+          <div class="toggle-wrap"><span style="font-size:0.75rem;color:var(--muted)">Active</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+        </div>
+        <div class="room-mgmt-card">
+          <div class="room-mgmt-name">Junior Suite</div>
+          <div class="room-mgmt-price">$380 / night</div>
+          <div class="room-status"><span class="status-dot dot-amber"></span> Limited (2 rooms)</div>
+          <div class="toggle-wrap"><span style="font-size:0.75rem;color:var(--muted)">Maintenance</span><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+        </div>
+        <div class="room-mgmt-card">
+          <div class="room-mgmt-name">Honeymoon Suite</div>
+          <div class="room-mgmt-price">$680 / night</div>
+          <div class="room-status"><span class="status-dot dot-green"></span> Available (1 room)</div>
+          <div class="toggle-wrap"><span style="font-size:0.75rem;color:var(--muted)">Active</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guests -->
+    <div class="admin-section" id="admin-guests">
+      <div class="admin-table-wrap">
+        <div class="admin-table-header"><span class="admin-table-title">Guest Directory</span><span class="admin-badge badge-gold">1,284 Guests</span></div>
+        <table>
+          <thead><tr><th>Guest</th><th>Email</th><th>Country</th><th>Visits</th><th>Total Spend</th><th>Tier</th></tr></thead>
+          <tbody>
+            <tr><td>Alexandra Moore</td><td>alex@example.com</td><td>United Kingdom</td><td>7</td><td>$14,560</td><td><span class="admin-badge badge-gold">Platinum</span></td></tr>
+            <tr><td>Hiroshi Tanaka</td><td>h.tanaka@example.jp</td><td>Japan</td><td>3</td><td>$18,000</td><td><span class="admin-badge badge-gold">Platinum</span></td></tr>
+            <tr><td>Isabelle Dupont</td><td>idupont@example.fr</td><td>France</td><td>2</td><td>$3,240</td><td><span class="admin-badge badge-blue">Gold</span></td></tr>
+            <tr><td>James Wilson</td><td>james@example.com</td><td>Australia</td><td>5</td><td>$8,900</td><td><span class="admin-badge badge-blue">Gold</span></td></tr>
+            <tr><td>Priya Sharma</td><td>priya@example.in</td><td>India</td><td>1</td><td>$560</td><td><span class="admin-badge badge-green">Silver</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Revenue -->
+    <div class="admin-section" id="admin-revenue">
+      <div class="admin-stats" style="margin-bottom:2rem">
+        <div class="admin-stat"><div class="admin-stat-label">YTD Revenue</div><div class="admin-stat-value">$842k</div><div class="admin-stat-change up">↑ 18% vs 2023</div></div>
+        <div class="admin-stat"><div class="admin-stat-label">Avg Daily Rate</div><div class="admin-stat-value">$486</div><div class="admin-stat-change up">↑ 6% this month</div></div>
+        <div class="admin-stat"><div class="admin-stat-label">RevPAR</div><div class="admin-stat-value">$423</div><div class="admin-stat-change up">↑ 9% vs last year</div></div>
+        <div class="admin-stat"><div class="admin-stat-label">Cancellation Rate</div><div class="admin-stat-value">4.2%</div><div class="admin-stat-change down">↓ 1.1% this month</div></div>
+      </div>
+      <div class="admin-table-wrap">
+        <div class="admin-table-header"><span class="admin-table-title">Monthly Revenue Breakdown</span></div>
+        <table>
+          <thead><tr><th>Month</th><th>Bookings</th><th>Room Revenue</th><th>F&amp;B Revenue</th><th>Spa Revenue</th><th>Total</th></tr></thead>
+          <tbody>
+            <tr><td>November 2025</td><td>248</td><td>$71,400</td><td>$14,200</td><td>$8,600</td><td>$94,200</td></tr>
+            <tr><td>October 2025</td><td>231</td><td>$66,800</td><td>$13,100</td><td>$7,900</td><td>$87,800</td></tr>
+            <tr><td>September 2025</td><td>219</td><td>$62,400</td><td>$11,800</td><td>$7,200</td><td>$81,400</td></tr>
+            <tr><td>August 2025</td><td>287</td><td>$84,200</td><td>$16,500</td><td>$10,100</td><td>$110,800</td></tr>
+            <tr><td>July 2025</td><td>302</td><td>$88,600</td><td>$17,200</td><td>$10,800</td><td>$116,600</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-icon">✦</div>
+  <div class="toast-content">
+    <div class="toast-title" id="toast-title">Message Sent!</div>
+    <div class="toast-msg" id="toast-msg">Thank you for reaching out. We'll get back to you within 24 hours.</div>
+  </div>
+  <button class="toast-close" onclick="hideToast()">✕</button>
+  <div class="toast-bar"></div>
+</div>
+
+<script>
+  // Nav scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Set default dates
+  const today = new Date();
+  const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+  const dayAfter = new Date(today); dayAfter.setDate(dayAfter.getDate() + 3);
+  const fmt = d => d.toISOString().split('T')[0];
+  document.getElementById('checkin').value = fmt(tomorrow);
+  document.getElementById('checkout').value = fmt(dayAfter);
+  document.getElementById('modal-checkin').value = fmt(tomorrow);
+  document.getElementById('modal-checkout').value = fmt(dayAfter);
+
+  // Booking modal
+  function openBooking() {
+    document.getElementById('booking-modal').classList.add('active');
+    goStep(1);
+  }
+  function openBookingRoom(name, price) {
+    openBooking();
+    const sel = document.getElementById('modal-room');
+    for (let o of sel.options) { if (o.value.startsWith(name)) { sel.value = o.value; break; } }
+  }
+  function closeBooking() {
+    document.getElementById('booking-modal').classList.remove('active');
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('step-1').classList.add('active');
+    document.getElementById('success-screen').style.display = 'none';
+    document.querySelectorAll('.modal-step').forEach((t,i) => t.classList.toggle('active', i===0));
+  }
+  function goStep(n) {
+    if (n === 2) buildSummary();
+    if (n === 3) document.getElementById('pay-total').textContent = document.getElementById('sum-total').textContent;
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.modal-step').forEach((t,i) => t.classList.toggle('active', i===n-1));
+    document.getElementById('step-' + n).classList.add('active');
+  }
+  function buildSummary() {
+    const roomSel = document.getElementById('modal-room').value.split('|');
+    const roomName = roomSel[0], rate = parseInt(roomSel[1]);
+    const ci = new Date(document.getElementById('modal-checkin').value);
+    const co = new Date(document.getElementById('modal-checkout').value);
+    const nights = Math.max(1, Math.round((co - ci) / 86400000));
+    const adults = parseInt(document.getElementById('modal-adults').value);
+    const children = parseInt(document.getElementById('modal-children').value);
+    const breakfast = document.getElementById('modal-breakfast').checked;
+    const bfCost = breakfast ? 10500 * adults * nights : 0;
+    const roomTotal = rate * nights;
+    const subtotal = roomTotal + bfCost;
+    const tax = Math.round(subtotal * 0.1);
+    const total = subtotal + tax;
+    const lkr = n => 'රු. ' + n.toLocaleString('si-LK');
+
+    document.getElementById('sum-room').textContent = roomName;
+    document.getElementById('sum-checkin').textContent = ci.toDateString();
+    document.getElementById('sum-checkout').textContent = co.toDateString();
+    document.getElementById('sum-nights').textContent = nights + ' රාත්‍රි' + (nights !== 1 ? '' : '');
+    document.getElementById('sum-guests').textContent = adults + ' වැඩිහිටි' + (children ? ', ' + children + ' දරු' : '');
+    document.getElementById('sum-room-total').textContent = lkr(roomTotal);
+    if (breakfast) {
+      document.getElementById('sum-breakfast-row').style.display = 'flex';
+      document.getElementById('sum-breakfast').textContent = lkr(bfCost);
+    } else {
+      document.getElementById('sum-breakfast-row').style.display = 'none';
+    }
+    document.getElementById('sum-tax').textContent = lkr(tax);
+    document.getElementById('sum-total').textContent = lkr(total);
+  }
+  function selectPayment(el) {
+    document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function formatCard(input) {
+    let v = input.value.replace(/\D/g, '').substring(0, 16);
+    input.value = v.replace(/(.{4})/g, '$1 ').trim();
+  }
+  function formatExpiry(input) {
+    let v = input.value.replace(/\D/g, '').substring(0, 4);
+    if (v.length >= 3) v = v.substring(0,2) + ' / ' + v.substring(2);
+    input.value = v;
+  }
+  function confirmBooking() {
+    const ref = 'SRN-' + Math.floor(1000 + Math.random() * 9000);
+    document.getElementById('booking-ref').textContent = 'Booking Reference: ' + ref;
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.querySelector('.modal-steps').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+  }
+
+  // Toast notification
+  let toastTimer;
+  function showToast(title, msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-title').textContent = title;
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => hideToast(), 4500);
+  }
+  function hideToast() {
+    document.getElementById('toast').classList.remove('show');
+  }
+
+  // ═══════════════════════════════════════════════
+  // EmailJS CONFIG — ඔබේ keys මෙතන දාන්න
+  // ═══════════════════════════════════════════════
+  const EMAILJS_PUBLIC_KEY   = 'YOUR_PUBLIC_KEY';    // emailjs.com → Account → Public Key
+  const EMAILJS_SERVICE_ID   = 'YOUR_SERVICE_ID';    // Email Services → Service ID
+  const EMAILJS_TEMPLATE_ID  = 'YOUR_TEMPLATE_ID';   // Email Templates → Template ID
+  // ═══════════════════════════════════════════════
+
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+  function sendContactForm() {
+    const fname   = document.getElementById('cf-fname').value.trim();
+    const lname   = document.getElementById('cf-lname').value.trim();
+    const email   = document.getElementById('cf-email').value.trim();
+    const type    = document.getElementById('cf-type').value;
+    const message = document.getElementById('cf-message').value.trim();
+    const btn     = document.getElementById('cf-btn');
+
+    if (!fname || !email || !message) {
+      showToast('⚠ අඩු තොරතුරු', 'කරුණාකර නම, email, සහ message පුරවන්න.');
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showToast('⚠ Email වැරදියි', 'කරුණාකර valid email address එකක් ඇතුළත් කරන්න.');
+      return;
+    }
+
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+
+    const templateParams = {
+      from_name:    fname + ' ' + lname,
+      from_email:   email,
+      enquiry_type: type,
+      message:      message,
+      reply_to:     email,
+    };
+
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+      .then(() => {
+        showToast('Email යැව්වා! ✦', fname + ' ගේ message ලැබුණා. ඉක්මනින් reply කරනවා!');
+        document.getElementById('cf-fname').value = '';
+        document.getElementById('cf-lname').value = '';
+        document.getElementById('cf-email').value = '';
+        document.getElementById('cf-message').value = '';
+        btn.textContent = 'Send Message';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      })
+      .catch(err => {
+        console.error('EmailJS error:', err);
+        showToast('⚠ Error', 'Email send වුණේ නැහැ. Keys හරියට set කළාද? Console check කරන්න.');
+        btn.textContent = 'Send Message';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      });
+  }
+
+  // Admin nav
+  function adminNav(el, section) {
+    document.querySelectorAll('.admin-nav-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('admin-' + section).classList.add('active');
+    const titles = { dashboard: 'Dashboard', bookings: 'Bookings', rooms: 'Room Management', guests: 'Guests', revenue: 'Revenue' };
+    document.getElementById('admin-page-title').textContent = titles[section];
+  }
+</script>
+</body>
+</html>

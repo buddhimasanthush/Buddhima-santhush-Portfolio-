@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blend Cafe - Modern Fast Food</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF6B35;
+            --secondary: #004E89;
+            --accent: #F7931E;
+            --light: #F5F5F5;
+            --dark: #1A1A1A;
+            --success: #06A77D;
+            --border-radius: 16px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--dark);
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+            transition: color var(--transition);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: width var(--transition);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5rem 5%;
+            gap: 4rem;
+            min-height: 90vh;
+            background: linear-gradient(135deg, #ffffff 0%, #fef3f0 50%, #f0f9ff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -100px;
+            left: 10%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 78, 137, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            bottom: -50px;
+            right: 5%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(30px); }
+        }
+
+        .hero-content {
+            flex: 1;
+            z-index: 2;
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            max-width: 500px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+            display: inline-block;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero-image-box {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 150px;
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.25);
+            transform: rotate(-5deg);
+            transition: transform var(--transition);
+        }
+
+        .hero-image-box:hover {
+            transform: rotate(-5deg) scale(1.05);
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .section-title p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Menu Section */
+        .menu {
+            background: linear-gradient(135deg, #ffffff 0%, #fef3f0 100%);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all var(--transition);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .menu-image {
+            width: 100%;
+            height: 200px;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: block;
+        }
+
+        .menu-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform var(--transition);
+            border-radius: 12px;
+        }
+
+        .menu-item:hover .menu-image img {
+            transform: scale(1.1);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(255, 107, 53, 0.2);
+        }
+
+        .menu-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .menu-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .menu-item p {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .price {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* About Section */
+        .about {
+            background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-text h3 {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .about-text p {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .about-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .feature {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text h4 {
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            color: var(--dark);
+        }
+
+        .feature-text p {
+            font-size: 0.9rem;
+            color: #888;
+            margin: 0;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, var(--secondary) 0%, #0078c9 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 60px rgba(0, 78, 137, 0.2);
+            overflow: hidden;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Gallery Section */
+        .gallery {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            height: 300px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all var(--transition);
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.25);
+        }
+
+        .gallery-item.large {
+            grid-column: span 2;
+        }
+
+        .gallery-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Reservations Section */
+        .reservations {
+            background: linear-gradient(135deg, #fef3f0 0%, #ffffff 100%);
+        }
+
+        .reservation-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        footer p {
+            margin: 0.5rem 0;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 1.5rem;
+            }
+
+            .hero {
+                flex-direction: column;
+                padding: 3rem 5%;
+                min-height: auto;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero-image-box {
+                width: 300px;
+                height: 300px;
+                font-size: 100px;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-item.large {
+                grid-column: span 1;
+            }
+        }
+
+        /* Animations on scroll */
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">☕ Blend</div>
+        <ul>
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#reservations">Reservations</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Your Daily <span>Escape</span></h1>
+            <p>Premium fast-casual dining with hand-crafted coffee, fresh food, and unforgettable moments. We're not just a cafe—we're your new favorite destination.</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary" onclick="document.getElementById('menu').scrollIntoView({ behavior: 'smooth' })">Explore Menu</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('reservations').scrollIntoView({ behavior: 'smooth' })">Book a Table</button>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=400&fit=crop" alt="Coffee" style="width:100%;height:100%;object-fit:cover;border-radius:30px;box-shadow: 0 20px 60px rgba(255, 107, 53, 0.25);">
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="menu">
+        <div class="section-title">
+            <h2>Our Menu</h2>
+            <p>Crafted with love, made fresh daily</p>
+        </div>
+        <div class="menu-grid">
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);">
+                    <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=300&fit=crop" alt="Signature Espresso" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Signature Espresso</h3>
+                <p>Rich, bold, and perfectly balanced. Our house blend roasted to perfection.</p>
+                <div class="price">₨450</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #D4A574 0%, #F4E4C1 100%);">
+                    <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=400&h=300&fit=crop" alt="Butter Croissant" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Butter Croissant</h3>
+                <p>Crispy layers of French butter pastry. A classic made fresh every morning.</p>
+                <div class="price">₨550</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #90EE90 0%, #32CD32 100%);">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop" alt="Fresh Bowl" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Fresh Bowl</h3>
+                <p>Seasonal vegetables, organic greens, and choice of protein. Healthy never tasted better.</p>
+                <div class="price">₨1,200</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #8B4513 0%, #3D2817 100%);">
+                    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=300&fit=crop" alt="Chocolate Cake" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Chocolate Cake</h3>
+                <p>Decadent dark chocolate cake with silky ganache. Pure indulgence.</p>
+                <div class="price">₨750</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);">
+                    <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop" alt="Breakfast Wrap" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Breakfast Wrap</h3>
+                <p>Scrambled eggs, avocado, cheese, and crispy bacon in a warm tortilla.</p>
+                <div class="price">₨950</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);">
+                    <img src="https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?w=400&h=300&fit=crop" alt="Acai Bowl" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Acai Bowl</h3>
+                <p>Topped with granola, fresh berries, coconut, and honey drizzle.</p>
+                <div class="price">₨1,050</div>
+            </div>
+
+            <!-- 15 New Menu Items -->
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #F4A261 0%, #E76F51 100%);">
+                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop" alt="Classic Burger" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Classic Burger</h3>
+                <p>Juicy beef patty with lettuce, tomato, pickles, and our secret sauce in a brioche bun.</p>
+                <div class="price">₨1,350</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #A8DADC 0%, #457B9D 100%);">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop" alt="Margherita Pizza" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Margherita Pizza</h3>
+                <p>Wood-fired base with San Marzano tomatoes, fresh mozzarella, and basil leaves.</p>
+                <div class="price">₨1,800</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #E9C46A 0%, #F4A261 100%);">
+                    <img src="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=400&h=300&fit=crop" alt="Chicken Pasta" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Creamy Chicken Pasta</h3>
+                <p>Al dente fettuccine tossed in a rich parmesan cream sauce with grilled chicken strips.</p>
+                <div class="price">₨1,500</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #264653 0%, #2A9D8F 100%);">
+                    <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=300&fit=crop" alt="Caesar Salad" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Caesar Salad</h3>
+                <p>Crisp romaine lettuce, parmesan shavings, house-made croutons, and classic Caesar dressing.</p>
+                <div class="price">₨900</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #6D4C41 0%, #4E342E 100%);">
+                    <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400&h=300&fit=crop" alt="Hot Chocolate" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Luxury Hot Chocolate</h3>
+                <p>Thick Belgian chocolate melted with steamed milk and topped with whipped cream and cocoa dust.</p>
+                <div class="price">₨650</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #FFDDD2 0%, #FF6B6B 100%);">
+                    <img src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=400&h=300&fit=crop" alt="Strawberry Smoothie" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Strawberry Smoothie</h3>
+                <p>Blended fresh strawberries, banana, Greek yogurt, and honey. Refreshing and nutritious.</p>
+                <div class="price">₨750</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #B5838D 0%, #6D6875 100%);">
+                    <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=300&fit=crop" alt="Waffles" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Belgian Waffles</h3>
+                <p>Golden crispy waffles served with maple syrup, fresh berries, and a dusting of powdered sugar.</p>
+                <div class="price">₨1,100</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #48CAE4 0%, #0077B6 100%);">
+                    <img src="https://images.unsplash.com/photo-1497534446932-c925b458314e?w=400&h=300&fit=crop" alt="Iced Matcha Latte" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Iced Matcha Latte</h3>
+                <p>Ceremonial grade matcha whisked with oat milk poured over ice. A calming, earthy delight.</p>
+                <div class="price">₨700</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #F6D365 0%, #FDA085 100%);">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop" alt="Pepperoni Pizza" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Pepperoni Pizza</h3>
+                <p>Loaded with premium pepperoni, mozzarella, and zesty tomato sauce on a crispy thin crust.</p>
+                <div class="price">₨2,000</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #A8E6CF 0%, #3D9970 100%);">
+                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop" alt="Avocado Toast" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Avocado Toast</h3>
+                <p>Smashed avocado on sourdough with poached egg, chili flakes, and microgreens.</p>
+                <div class="price">₨850</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #FFCCD5 0%, #C9184A 100%);">
+                    <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop" alt="Cheesecake" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>New York Cheesecake</h3>
+                <p>Velvety smooth cream cheese filling on a buttery graham cracker crust. Served with berry coulis.</p>
+                <div class="price">₨800</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #E2B96F 0%, #9C6D2E 100%);">
+                    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop" alt="Grilled Chicken Sandwich" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Grilled Chicken Sandwich</h3>
+                <p>Herb-marinated grilled chicken with coleslaw, pickles, and chipotle mayo in a toasted bun.</p>
+                <div class="price">₨1,250</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #D4E09B 0%, #6B9E3E 100%);">
+                    <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=300&fit=crop" alt="Pancakes" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Fluffy Pancakes</h3>
+                <p>Stack of three buttermilk pancakes served with butter, maple syrup, and seasonal fresh fruit.</p>
+                <div class="price">₨950</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #C77DFF 0%, #7B2FBE 100%);">
+                    <img src="https://images.unsplash.com/photo-1541544537156-7627a7a4aa1c?w=400&h=300&fit=crop" alt="Blueberry Muffin" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Blueberry Muffin</h3>
+                <p>Moist, fluffy muffin bursting with fresh blueberries and topped with a crunchy streusel crumble.</p>
+                <div class="price">₨400</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-image" style="background: linear-gradient(135deg, #FF9A3C 0%, #FF4800 100%);">
+                    <img src="https://images.unsplash.com/photo-1525755662778-989d0524087e?w=400&h=300&fit=crop" alt="Mango Lassi" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+                </div>
+                <h3>Mango Lassi</h3>
+                <p>Chilled blend of ripe Alphonso mangoes, yogurt, and a hint of cardamom. Tropical refreshment.</p>
+                <div class="price">₨600</div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="section-title">
+            <h2>Why Choose Blend?</h2>
+            <p>Discover what makes us special</p>
+        </div>
+        <div class="about-content">
+            <div class="about-text">
+                <h3>Craft & Community</h3>
+                <p>Since 2020, Blend has been the heart of our community. We believe every cup of coffee and every meal is an opportunity to connect, create, and celebrate the simple pleasures of life.</p>
+                <div class="about-features">
+                    <div class="feature">
+                        <div class="feature-icon">☕</div>
+                        <div class="feature-text">
+                            <h4>Premium Coffee</h4>
+                            <p>Single-origin beans, expertly roasted daily</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🌱</div>
+                        <div class="feature-text">
+                            <h4>Fresh Ingredients</h4>
+                            <p>Local sourcing, sustainable practices</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🎵</div>
+                        <div class="feature-text">
+                            <h4>Great Vibes</h4>
+                            <p>Curated playlists and cozy spaces</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1493857671505-72967e2e2760?w=500&h=400&fit=crop" alt="Cafe Ambiance" style="width:100%;height:100%;object-fit:cover;border-radius:20px;">
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery">
+        <div class="section-title">
+            <h2>Gallery</h2>
+            <p>Moments captured at Blend</p>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item large">
+                <img src="https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=800&h=500&fit=crop" alt="Coffee Shop Interior" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=400&h=300&fit=crop" alt="Coffee Latte Art" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=300&fit=crop" alt="Espresso Cup" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop" alt="Happy Customers" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=400&h=300&fit=crop" alt="Breakfast Spread" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+        </div>
+    </section>
+
+    <!-- Reservations Section -->
+    <section id="reservations" class="reservations">
+        <div class="section-title">
+            <h2>Make a Reservation</h2>
+            <p>Reserve your spot and let us make your day special</p>
+        </div>
+        <div class="reservation-container">
+            <form onsubmit="handleReservation(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Time</label>
+                        <input type="time" id="time" name="time" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="guests">Number of Guests</label>
+                        <select id="guests" name="guests" required>
+                            <option value="">Select number of guests</option>
+                            <option value="1">1 Guest</option>
+                            <option value="2">2 Guests</option>
+                            <option value="3">3 Guests</option>
+                            <option value="4">4 Guests</option>
+                            <option value="5">5+ Guests</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+94 77 123 4567" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Special Requests</label>
+                    <textarea id="notes" name="notes" placeholder="Dietary restrictions, celebrations, or anything else we should know..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Confirm Reservation</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>Blend Cafe</strong> • Where Coffee Meets Community</p>
+        <p>📍 123 Brew Street, Coffee City | 📞 +94 11 234 5678 | 📧 hello@blendcafe.com</p>
+        <p>&copy; 2024 Blend Cafe. All rights reserved. ☕</p>
+    </footer>
+
+    <script>
+        // Handle reservation form submission
+        function handleReservation(event) {
+            event.preventDefault();
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value,
+                guests: document.getElementById('guests').value,
+                phone: document.getElementById('phone').value,
+                notes: document.getElementById('notes').value
+            };
+            
+            alert(`Thank you, ${formData.name}! Your reservation for ${formData.guests} guest(s) on ${formData.date} at ${formData.time} has been confirmed. We'll see you soon! ☕`);
+            event.target.reset();
+        }
+
+        // Fade in elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.menu-item, .gallery-item, .feature').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
