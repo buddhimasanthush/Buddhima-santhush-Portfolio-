@@ -476,6 +476,116 @@ textarea.cinput{resize:vertical;min-height:130px;}
   color:#080c14;
   transform:rotate(45deg);
 }
+
+/* PDF MODAL */
+#pdf-modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(3,7,18,0.85);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  z-index:10000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  transition:opacity 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+#pdf-modal-overlay.open{
+  display:flex;
+  opacity:1;
+}
+#pdf-modal{
+  background:rgba(17,24,39,0.97);
+  border:1px solid rgba(0,212,255,0.2);
+  border-radius:16px;
+  box-shadow:0 40px 80px rgba(0,0,0,0.7),0 0 60px rgba(0,212,255,0.08);
+  width:90vw;
+  max-width:900px;
+  height:88vh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  transform:scale(0.92) translateY(30px);
+  transition:transform 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+#pdf-modal-overlay.open #pdf-modal{
+  transform:scale(1) translateY(0);
+}
+#pdf-modal-topbar{
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  padding:1rem 1.4rem;
+  border-bottom:1px solid rgba(0,212,255,0.1);
+  background:rgba(0,212,255,0.03);
+  flex-shrink:0;
+}
+#pdf-modal-icon{
+  width:36px;height:36px;
+  border-radius:8px;
+  background:linear-gradient(135deg,rgba(0,212,255,0.2),rgba(139,92,246,0.2));
+  border:1px solid rgba(0,212,255,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;
+  flex-shrink:0;
+}
+#pdf-modal-title{
+  flex:1;
+  font-family:'Inter',sans-serif;
+  font-weight:700;
+  font-size:0.95rem;
+  color:#f3f4f6;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+#pdf-modal-download{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  padding:0.45rem 1rem;
+  background:rgba(0,212,255,0.1);
+  border:1px solid rgba(0,212,255,0.25);
+  border-radius:6px;
+  color:var(--accent,#00d4ff);
+  font-size:0.82rem;
+  font-weight:600;
+  text-decoration:none;
+  cursor:none;
+  transition:all 0.25s;
+  flex-shrink:0;
+}
+#pdf-modal-download:hover{
+  background:rgba(0,212,255,0.2);
+  border-color:rgba(0,212,255,0.5);
+}
+#pdf-modal-close{
+  width:36px;height:36px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  color:#9ca3af;
+  font-size:1.2rem;
+  display:flex;align-items:center;justify-content:center;
+  cursor:none;
+  transition:all 0.25s;
+  flex-shrink:0;
+  line-height:1;
+}
+#pdf-modal-close:hover{
+  background:rgba(239,68,68,0.15);
+  border-color:rgba(239,68,68,0.4);
+  color:#ef4444;
+  transform:rotate(90deg);
+}
+#pdf-modal-iframe{
+  flex:1;
+  width:100%;
+  border:none;
+  background:#1a1a2e;
+}
+@media(max-width:600px){
+  #pdf-modal{width:96vw;height:92vh;border-radius:10px;}
+  #pdf-modal-title{font-size:0.8rem;}
+}
 </style>
 </head>
 <body>
@@ -496,6 +606,19 @@ textarea.cinput{resize:vertical;min-height:130px;}
   </ul>
 </nav>
 
+<!-- PDF VIEWER MODAL -->
+<div id="pdf-modal-overlay" role="dialog" aria-modal="true" aria-label="PDF Viewer">
+  <div id="pdf-modal">
+    <div id="pdf-modal-topbar">
+      <div id="pdf-modal-icon">📄</div>
+      <div id="pdf-modal-title">Document</div>
+      <a id="pdf-modal-download" href="#" download>⬇ Download</a>
+      <button id="pdf-modal-close" onclick="closePdfModal()" aria-label="Close">✕</button>
+    </div>
+    <iframe id="pdf-modal-iframe" src="" title="PDF Viewer"></iframe>
+  </div>
+</div>
+
 <!-- HERO -->
 <section id="hero">
   <div class="hero-bg"></div>
@@ -508,7 +631,7 @@ textarea.cinput{resize:vertical;min-height:130px;}
     <p class="hero-desc">Passionate about building scalable software solutions. Strong foundation in algorithms, data structures, and modern web technologies.</p>
     <div class="hero-cta">
       <a href="#projects" class="btn-primary">View Projects</a>
-      <a href="Buddhima_CV.pdf" download="Buddhima_Samaraweera_CV.pdf" class="btn-outline">Download CV</a>
+      <button class="btn-outline" onclick="openPdfModal('Buddhima_CV.pdf','Curriculum Vitae — Buddhima Samaraweera')">View CV</button>
       <a href="mailto:buddhimasanthush@gmail.com" class="btn-outline">Contact Me</a>
     </div>
   </div>
@@ -531,7 +654,7 @@ textarea.cinput{resize:vertical;min-height:130px;}
         <p>Software Engineering undergraduate at IIT Sri Lanka, with hands-on experience in Python, Java, and modern web technologies. Strong foundation in algorithms and data structures, with a keen interest in building efficient, scalable software solutions.</p>
         <p>Gained practical experience in mobile development, front-end engineering, and database design through academic and personal projects. Active member of the Coding Club and Tech Society, passionate about clean, user-centric applications.</p>
         <p>Proficient in Python, Java, JavaScript, SQL, and Flutter. Tools: Git, GitHub, Figma. Fluent in English and Sinhala.</p>
-        <a href="Buddhima_CV.pdf" download="Buddhima_Samaraweera_CV.pdf" class="btn-primary" style="margin-top: 2rem; display: inline-flex; align-items: center; gap: 0.5rem;">Download CV <span style="font-size: 1.15rem;">&#8595;</span></a>
+        <button class="btn-primary" onclick="openPdfModal('Buddhima_CV.pdf','Curriculum Vitae — Buddhima Samaraweera')" style="margin-top: 2rem; display: inline-flex; align-items: center; gap: 0.5rem;">View CV <span style="font-size: 1.15rem;">👁</span></button>
       </div>
       <div class="reveal">
         <div class="section-tag">Technical Skills</div>
@@ -731,7 +854,7 @@ textarea.cinput{resize:vertical;min-height:130px;}
     </div>
     <div class="certs-grid">
 
-      <a class="cert-card reveal" href="CertificateOfCompletion_Advanced Python Classes and Functions.pdf" target="_blank">
+      <div class="cert-card reveal" role="button" tabindex="0" onclick="openPdfModal('CertificateOfCompletion_Advanced Python Classes and Functions.pdf','Advanced Python Classes and Functions')">
         <div style="display:flex;align-items:center;gap:1rem;">
           <div class="cert-badge">🐍</div>
           <div>
@@ -743,9 +866,9 @@ textarea.cinput{resize:vertical;min-height:130px;}
           <span class="cert-platform-badge">🎓 Python</span>
           <div class="cert-open-btn">↗</div>
         </div>
-      </a>
+      </div>
 
-      <a class="cert-card reveal" href="CertificateOfCompletion_HandsOn AI Build a Generative Language Model from Scratch.pdf" target="_blank">
+      <div class="cert-card reveal" role="button" tabindex="0" onclick="openPdfModal('CertificateOfCompletion_HandsOn AI Build a Generative Language Model from Scratch.pdf','Hands-On AI: Build a Generative Language Model from Scratch')">
         <div style="display:flex;align-items:center;gap:1rem;">
           <div class="cert-badge">🤖</div>
           <div>
@@ -757,9 +880,9 @@ textarea.cinput{resize:vertical;min-height:130px;}
           <span class="cert-platform-badge">🎓 AI &amp; ML</span>
           <div class="cert-open-btn">↗</div>
         </div>
-      </a>
+      </div>
 
-      <a class="cert-card reveal" href="CertificateOfCompletion_Java ObjectOriented Programming.pdf" target="_blank">
+      <div class="cert-card reveal" role="button" tabindex="0" onclick="openPdfModal('CertificateOfCompletion_Java ObjectOriented Programming.pdf','Java Object-Oriented Programming')">
         <div style="display:flex;align-items:center;gap:1rem;">
           <div class="cert-badge">☕</div>
           <div>
@@ -771,9 +894,9 @@ textarea.cinput{resize:vertical;min-height:130px;}
           <span class="cert-platform-badge">🎓 Java</span>
           <div class="cert-open-btn">↗</div>
         </div>
-      </a>
+      </div>
 
-      <a class="cert-card reveal" href="CertificateOfCompletion_Learning Python.pdf" target="_blank">
+      <div class="cert-card reveal" role="button" tabindex="0" onclick="openPdfModal('CertificateOfCompletion_Learning Python.pdf','Learning Python')">
         <div style="display:flex;align-items:center;gap:1rem;">
           <div class="cert-badge">📘</div>
           <div>
@@ -785,9 +908,9 @@ textarea.cinput{resize:vertical;min-height:130px;}
           <span class="cert-platform-badge">🎓 Python</span>
           <div class="cert-open-btn">↗</div>
         </div>
-      </a>
+      </div>
 
-      <a class="cert-card reveal" href="CertificateOfCompletion_Nail Your Python Interview.pdf" target="_blank">
+      <div class="cert-card reveal" role="button" tabindex="0" onclick="openPdfModal('CertificateOfCompletion_Nail Your Python Interview.pdf','Nail Your Python Interview')">
         <div style="display:flex;align-items:center;gap:1rem;">
           <div class="cert-badge">🎯</div>
           <div>
@@ -799,9 +922,9 @@ textarea.cinput{resize:vertical;min-height:130px;}
           <span class="cert-platform-badge">🎓 Python</span>
           <div class="cert-open-btn">↗</div>
         </div>
-      </a>
+      </div>
 
-      <a class="cert-card reveal" href="CertificateOfCompletion_Oracle Java Foundations.pdf" target="_blank">
+      <div class="cert-card reveal" role="button" tabindex="0" onclick="openPdfModal('CertificateOfCompletion_Oracle Java Foundations.pdf','Oracle Java Foundations')">
         <div style="display:flex;align-items:center;gap:1rem;">
           <div class="cert-badge">☕</div>
           <div>
@@ -813,9 +936,9 @@ textarea.cinput{resize:vertical;min-height:130px;}
           <span class="cert-platform-badge">🎓 Java</span>
           <div class="cert-open-btn">↗</div>
         </div>
-      </a>
+      </div>
 
-      <a class="cert-card reveal" href="CertificateOfCompletion_Python Data Analysis.pdf" target="_blank">
+      <div class="cert-card reveal" role="button" tabindex="0" onclick="openPdfModal('CertificateOfCompletion_Python Data Analysis.pdf','Python Data Analysis')">
         <div style="display:flex;align-items:center;gap:1rem;">
           <div class="cert-badge">📊</div>
           <div>
@@ -827,9 +950,9 @@ textarea.cinput{resize:vertical;min-height:130px;}
           <span class="cert-platform-badge">🎓 Data</span>
           <div class="cert-open-btn">↗</div>
         </div>
-      </a>
+      </div>
 
-      <a class="cert-card reveal" href="CertificateOfCompletion_Python Essential Training.pdf" target="_blank">
+      <div class="cert-card reveal" role="button" tabindex="0" onclick="openPdfModal('CertificateOfCompletion_Python Essential Training.pdf','Python Essential Training')">
         <div style="display:flex;align-items:center;gap:1rem;">
           <div class="cert-badge">⚡</div>
           <div>
@@ -841,9 +964,9 @@ textarea.cinput{resize:vertical;min-height:130px;}
           <span class="cert-platform-badge">🎓 Python</span>
           <div class="cert-open-btn">↗</div>
         </div>
-      </a>
+      </div>
 
-      <a class="cert-card reveal" href="CertificateOfCompletion_Python for Students.pdf" target="_blank">
+      <div class="cert-card reveal" role="button" tabindex="0" onclick="openPdfModal('CertificateOfCompletion_Python for Students.pdf','Python for Students')">
         <div style="display:flex;align-items:center;gap:1rem;">
           <div class="cert-badge">🎒</div>
           <div>
@@ -855,9 +978,9 @@ textarea.cinput{resize:vertical;min-height:130px;}
           <span class="cert-platform-badge">🎓 Python</span>
           <div class="cert-open-btn">↗</div>
         </div>
-      </a>
+      </div>
 
-      <a class="cert-card reveal" href="CertificateOfCompletion_Python GUI Development with Tkinter.pdf" target="_blank">
+      <div class="cert-card reveal" role="button" tabindex="0" onclick="openPdfModal('CertificateOfCompletion_Python GUI Development with Tkinter.pdf','Python GUI Development with Tkinter')">
         <div style="display:flex;align-items:center;gap:1rem;">
           <div class="cert-badge">🖥️</div>
           <div>
@@ -869,9 +992,9 @@ textarea.cinput{resize:vertical;min-height:130px;}
           <span class="cert-platform-badge">🎓 Python</span>
           <div class="cert-open-btn">↗</div>
         </div>
-      </a>
+      </div>
 
-      <a class="cert-card reveal" href="CertificateOfCompletion_Python Projects (1).pdf" target="_blank">
+      <div class="cert-card reveal" role="button" tabindex="0" onclick="openPdfModal('CertificateOfCompletion_Python Projects (1).pdf','Python Projects (Advanced)')">
         <div style="display:flex;align-items:center;gap:1rem;">
           <div class="cert-badge">🚀</div>
           <div>
@@ -883,9 +1006,9 @@ textarea.cinput{resize:vertical;min-height:130px;}
           <span class="cert-platform-badge">🎓 Python</span>
           <div class="cert-open-btn">↗</div>
         </div>
-      </a>
+      </div>
 
-      <a class="cert-card reveal" href="CertificateOfCompletion_Python Projects.pdf" target="_blank">
+      <div class="cert-card reveal" role="button" tabindex="0" onclick="openPdfModal('CertificateOfCompletion_Python Projects.pdf','Python Projects')">
         <div style="display:flex;align-items:center;gap:1rem;">
           <div class="cert-badge">💡</div>
           <div>
@@ -897,9 +1020,9 @@ textarea.cinput{resize:vertical;min-height:130px;}
           <span class="cert-platform-badge">🎓 Python</span>
           <div class="cert-open-btn">↗</div>
         </div>
-      </a>
+      </div>
 
-      <a class="cert-card reveal" href="CertificateOfCompletion_Python Quick Start (1).pdf" target="_blank">
+      <div class="cert-card reveal" role="button" tabindex="0" onclick="openPdfModal('CertificateOfCompletion_Python Quick Start (1).pdf','Python Quick Start (Vol. 2)')">
         <div style="display:flex;align-items:center;gap:1rem;">
           <div class="cert-badge">▶️</div>
           <div>
@@ -911,9 +1034,9 @@ textarea.cinput{resize:vertical;min-height:130px;}
           <span class="cert-platform-badge">🎓 Python</span>
           <div class="cert-open-btn">↗</div>
         </div>
-      </a>
+      </div>
 
-      <a class="cert-card reveal" href="CertificateOfCompletion_Python Quick Start.pdf" target="_blank">
+      <div class="cert-card reveal" role="button" tabindex="0" onclick="openPdfModal('CertificateOfCompletion_Python Quick Start.pdf','Python Quick Start')">
         <div style="display:flex;align-items:center;gap:1rem;">
           <div class="cert-badge">🏁</div>
           <div>
@@ -925,7 +1048,7 @@ textarea.cinput{resize:vertical;min-height:130px;}
           <span class="cert-platform-badge">🎓 Python</span>
           <div class="cert-open-btn">↗</div>
         </div>
-      </a>
+      </div>
 
     </div>
   </div>
@@ -1626,6 +1749,55 @@ if (!document.getElementById('orb-style')) {
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 })();
+// PDF Modal
+function openPdfModal(pdfFile, title) {
+  const overlay = document.getElementById('pdf-modal-overlay');
+  const iframe  = document.getElementById('pdf-modal-iframe');
+  const titleEl = document.getElementById('pdf-modal-title');
+  const dlBtn   = document.getElementById('pdf-modal-download');
+
+  iframe.src  = '';           // reset first to avoid stale content flash
+  titleEl.textContent = title || pdfFile;
+  dlBtn.href  = pdfFile;
+  dlBtn.setAttribute('download', pdfFile);
+
+  // Small delay so the browser renders the empty iframe before injecting PDF
+  setTimeout(() => { iframe.src = pdfFile; }, 60);
+
+  overlay.style.display = 'flex';
+  // Force reflow so the transition fires
+  overlay.offsetHeight;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePdfModal() {
+  const overlay = document.getElementById('pdf-modal-overlay');
+  const iframe  = document.getElementById('pdf-modal-iframe');
+  overlay.classList.remove('open');
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    iframe.src = '';
+  }, 300);
+  document.body.style.overflow = '';
+}
+
+// Close on backdrop click
+document.getElementById('pdf-modal-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closePdfModal();
+});
+
+// Close on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closePdfModal();
+});
+
+// Make cert cards keyboard-accessible
+document.querySelectorAll('.cert-card[role="button"]').forEach(card => {
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+  });
+});
 </script>
 
 
